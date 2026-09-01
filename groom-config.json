@@ -28,32 +28,6 @@
       "desc": "Bath, haircut, nail trim, ear cleaning"
     }
   ],
-  "clients": [
-    {
-      "name": "Kim",
-      "phone": "6035551212",
-      "email": "email@email.com",
-      "pets": [
-        {
-          "name": "Fluffers",
-          "breed": "Cat",
-          "coatType": "Short/Smooth",
-          "size": "Small (under 25 lbs)",
-          "temperament": "sheds a lot but friendly",
-          "lastGroomDate": "",
-          "photo": "107-5ec77d33237aa__700.jpg",
-          "vaccinations": [
-            {
-              "name": "Rabies",
-              "expiry": ""
-            }
-          ],
-          "groomingHistory": []
-        }
-      ],
-      "portalId": "806cbc22eca869850dfce2577684f4ad"
-    }
-  ],
   "gallery": [
     {
       "before": "107-5ec77d33237aa__700.jpg",
