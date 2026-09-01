@@ -1,0 +1,70 @@
+{
+  "business": {
+    "name": "Shear Pawfection Pet Grooming",
+    "tagline": "Gentle Grooming for happy pets",
+    "phone": "603-555-1212",
+    "email": "email@email.com",
+    "address": "123 Main Street Lee NH",
+    "hours": "Mon-Fri 8:00am - 5:00pm",
+    "about": "Hi, I’m Kim, the founder and lead stylist at Shear Pawfection Pet Grooming. With over 8 years of professional grooming experience and a certification from the National Dog Groomers Association of America (NDGAA), I treat every pet like family. I specialize in breed-specific haircuts, creative styling, and skin-soothing therapies. My ultimate goal is to provide a calm, positive environment where your furry friends can feel safe, pampered, and loved. When I’m not at the styling table, I’m volunteering at local shelters or hiking with my golden retriever, Barnaby."
+  },
+  "modules": {
+    "gallery": true,
+    "services": true,
+    "testimonials": true,
+    "portal": true,
+    "appointments": true,
+    "reminders": false
+  },
+  "services": [
+    {
+      "name": "Full Groom (small dog)",
+      "price": "$55",
+      "desc": "Bath, haircut, nail trim, ear cleaning"
+    },
+    {
+      "name": "Full Groom (large dog)",
+      "price": "$95",
+      "desc": "Bath, haircut, nail trim, ear cleaning"
+    }
+  ],
+  "clients": [
+    {
+      "name": "Kim",
+      "phone": "6035551212",
+      "email": "email@email.com",
+      "pets": [
+        {
+          "name": "Fluffers",
+          "breed": "Cat",
+          "coatType": "Short/Smooth",
+          "size": "Small (under 25 lbs)",
+          "temperament": "sheds a lot but friendly",
+          "lastGroomDate": "",
+          "photo": "107-5ec77d33237aa__700.jpg",
+          "vaccinations": [
+            {
+              "name": "Rabies",
+              "expiry": ""
+            }
+          ],
+          "groomingHistory": []
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "before": "107-5ec77d33237aa__700.jpg",
+      "after": "107-5ec77d33237aa__700 (1).jpg",
+      "caption": ""
+    }
+  ],
+  "testimonials": [],
+  "site": {
+    "ghOwner": "Equinox-Security",
+    "ghRepo": "Pet-Groomer",
+    "workerUrl": "https://groom-forms.stealthmail.workers.dev",
+    "goatCounterCode": ""
+  }
+}
