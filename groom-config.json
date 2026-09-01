@@ -38,7 +38,12 @@
   "theme": {
     "selected": "coral",
     "customPrimary": "#c4593f",
-    "customAccent": "#e0785a"
+    "customAccent": "#e0785a",
+    "gradBase": "#c4593f",
+    "gradAccent": "#e0785a",
+    "gradDir": "135deg",
+    "gradSplit": "50",
+    "cardRadius": "10"
   },
   "testimonials": [],
   "site": {
