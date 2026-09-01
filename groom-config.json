@@ -6,7 +6,8 @@
     "email": "email@email.com",
     "address": "123 Main Street Lee NH",
     "hours": "Mon-Fri 8:00am - 5:00pm",
-    "about": "Hi, I’m Kim, the founder and lead stylist at Shear Pawfection Pet Grooming. With over 8 years of professional grooming experience and a certification from the National Dog Groomers Association of America (NDGAA), I treat every pet like family. I specialize in breed-specific haircuts, creative styling, and skin-soothing therapies. My ultimate goal is to provide a calm, positive environment where your furry friends can feel safe, pampered, and loved. When I’m not at the styling table, I’m volunteering at local shelters or hiking with my golden retriever, Barnaby."
+    "about": "Hi, I’m Kim, the founder and lead stylist at Shear Pawfection Pet Grooming. With over 8 years of professional grooming experience and a certification from the National Dog Groomers Association of America (NDGAA), I treat every pet like family. I specialize in breed-specific haircuts, creative styling, and skin-soothing therapies. My ultimate goal is to provide a calm, positive environment where your furry friends can feel safe, pampered, and loved. When I’m not at the styling table, I’m volunteering at local shelters or hiking with my golden retriever, Barnaby.",
+    "heroPhoto": ""
   },
   "modules": {
     "gallery": true,
@@ -28,6 +29,9 @@
       "desc": "Bath, haircut, nail trim, ear cleaning"
     }
   ],
+  "servicesPagePhotos": "",
+  "servicesSlideStyle": "blur",
+  "vignetteOpacity": "70",
   "gallery": [
     {
       "before": "Kim-Daisy-Before.png",
@@ -36,14 +40,17 @@
     }
   ],
   "theme": {
-    "selected": "coral",
-    "customPrimary": "#c4593f",
-    "customAccent": "#e0785a",
-    "gradBase": "#c4593f",
-    "gradAccent": "#e0785a",
+    "selected": "gradient",
+    "customPrimary": "#1a2a4a",
+    "customAccent": "#3a6ea5",
+    "gradBase": "#1a2a4a",
+    "gradAccent": "#4991df",
     "gradDir": "135deg",
-    "gradSplit": "50",
-    "cardRadius": "10"
+    "gradSplit": "77",
+    "cardRadius": "10",
+    "heroOpacity": "100",
+    "overlayTop": "20",
+    "overlayBottom": "60"
   },
   "testimonials": [],
   "site": {
@@ -51,6 +58,7 @@
     "ghRepo": "Pet-Groomer",
     "workerUrl": "https://groom-forms.stealthmail.workers.dev",
     "goatCounterCode": "",
-    "imagesSubfolder": "images"
+    "imagesSubfolder": "images",
+    "pwaEnabled": true
   }
 }
