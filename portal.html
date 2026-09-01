@@ -35,6 +35,21 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f7f0ec;margin:0;
     <div class="portal-field"><label>Username</label><input type="text" id="login-user"/></div>
     <div class="portal-error" id="login-error"></div>
     <button class="portal-btn" onclick="doLogin()">Sign In</button>
+    <p style="text-align:center;font-size:0.78rem;color:#9a8078;margin-top:1rem;"><a href="#" onclick="toggleForgotPassword(true);return false;" style="color:#e0785a;">Forgot password?</a></p>
+    <div id="forgot-password-box" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid #eee;">
+      <p style="font-size:0.8rem;color:#9a8078;margin-bottom:0.75rem;">Enter your username and we'll email you a reset code.</p>
+      <div class="portal-field"><label>Username</label><input type="text" id="fp-user"/></div>
+      <div class="portal-error" id="fp-status" style="color:#4a9d6e;"></div>
+      <button class="portal-btn" onclick="requestReset()">Send Reset Code</button>
+      <div id="fp-step2" style="display:none;margin-top:0.85rem;">
+        <p style="font-size:0.8rem;color:#9a8078;margin-bottom:0.75rem;">Your code expires in 30 minutes.</p>
+        <div class="portal-field"><label>Reset Code</label><input type="text" id="fp-code" placeholder="6-digit code from email"/></div>
+        <div class="portal-field"><label>New Password <span style="font-weight:400;color:#9a8078;">(8-20 letters/numbers)</span></label><div class="pw-toggle-wrap"><input type="password" id="fp-newpass"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('fp-newpass');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
+        <div class="portal-field"><label>Confirm New Password</label><div class="pw-toggle-wrap"><input type="password" id="fp-newpass-confirm"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('fp-newpass-confirm');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
+        <button class="portal-btn" onclick="confirmReset()">Reset Password</button>
+      </div>
+      <p style="text-align:center;font-size:0.78rem;color:#9a8078;margin-top:0.75rem;"><a href="#" onclick="toggleForgotPassword(false);return false;" style="color:#e0785a;">Cancel</a></p>
+    </div>
   </div>
   <div class="portal-panel" id="panel-register">
     <div class="portal-field"><label>Your Name</label><input type="text" id="reg-name"/></div>
@@ -54,6 +69,59 @@ function switchTab(tab){
   document.querySelectorAll('.portal-tab').forEach(function(t,i){ t.classList.toggle('active', (tab==='login'?i===0:i===1)); });
   document.getElementById('panel-login').classList.toggle('active', tab==='login');
   document.getElementById('panel-register').classList.toggle('active', tab==='register');
+}
+function toggleForgotPassword(show){
+  document.getElementById('forgot-password-box').style.display = show ? 'block' : 'none';
+  document.getElementById('login-user').closest('.portal-panel').querySelectorAll('.portal-field,.portal-btn').forEach(function(el){
+    if (!el.closest('#forgot-password-box')) el.style.display = show ? 'none' : '';
+  });
+}
+async function requestReset(){
+  var user = document.getElementById('fp-user').value.trim();
+  var status = document.getElementById('fp-status');
+  status.style.display = 'none';
+  if (!user) { status.style.color='#c0392b'; status.textContent='Please enter your username.'; status.style.display='block'; return; }
+  try {
+    var res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'reset_request', username:user})});
+    if (res.ok) {
+      status.style.color='#4a9d6e'; status.textContent='If that username exists, a reset code has been emailed to you. Enter it below.'; status.style.display='block';
+      document.getElementById('fp-step2').style.display='block';
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      status.style.color='#c0392b'; status.textContent=errText||'Something went wrong. Please try again.'; status.style.display='block';
+    }
+  } catch(e) {
+    status.style.color='#c0392b'; status.textContent='Something went wrong. Please try again.'; status.style.display='block';
+  }
+}
+async function confirmReset(){
+  var user = document.getElementById('fp-user').value.trim();
+  var code = document.getElementById('fp-code').value.trim();
+  var newPass = document.getElementById('fp-newpass').value;
+  var newPassConfirm = document.getElementById('fp-newpass-confirm').value;
+  var status = document.getElementById('fp-status');
+  status.style.display = 'none';
+  if (!code || !newPass || !newPassConfirm) { status.style.color='#c0392b'; status.textContent='Please enter the code and a new password.'; status.style.display='block'; return; }
+  if (!/^[a-zA-Z0-9]{8,20}$/.test(newPass)) { status.style.color='#c0392b'; status.textContent='Password must be 8-20 letters/numbers.'; status.style.display='block'; return; }
+  if (newPass !== newPassConfirm) { status.style.color='#c0392b'; status.textContent='Passwords do not match — please re-enter them.'; status.style.display='block'; return; }
+  var btn = document.querySelector('#fp-step2 .portal-btn');
+  if (btn) { btn.disabled=true; btn.textContent='Resetting…'; }
+  try {
+    var res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'reset_confirm', username:user, code:code, newPassword:newPass})});
+    if (res.ok) {
+      document.getElementById('fp-code').value=''; document.getElementById('fp-newpass').value=''; document.getElementById('fp-newpass-confirm').value='';
+      if (btn) { btn.disabled=false; btn.textContent='Reset Password'; }
+      toggleForgotPassword(false);
+      var loginMsg = document.getElementById('login-error');
+      loginMsg.style.color='#4a9d6e'; loginMsg.textContent='Password reset! It can take a few minutes for the change to fully take effect. If signing in doesn’t work right away, please wait a bit and try again.'; loginMsg.style.display='block';
+    } else {
+      if (btn) { btn.disabled=false; btn.textContent='Reset Password'; }
+      status.style.color='#c0392b'; status.textContent='That code is incorrect or has expired. Please request a new one.'; status.style.display='block';
+    }
+  } catch(e) {
+    if (btn) { btn.disabled=false; btn.textContent='Reset Password'; }
+    status.style.color='#c0392b'; status.textContent='Something went wrong. Please try again.'; status.style.display='block';
+  }
 }
 async function doLogin(){
   var user = document.getElementById('login-user').value.trim();
