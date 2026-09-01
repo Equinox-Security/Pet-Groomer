@@ -35,12 +35,17 @@
       "caption": ""
     }
   ],
+  "theme": {
+    "selected": "coral",
+    "customPrimary": "#c4593f",
+    "customAccent": "#e0785a"
+  },
   "testimonials": [],
   "site": {
     "ghOwner": "Equinox-Security",
     "ghRepo": "Pet-Groomer",
     "workerUrl": "https://groom-forms.stealthmail.workers.dev",
     "goatCounterCode": "",
-    "imagesSubfolder": ""
+    "imagesSubfolder": "images"
   }
 }
