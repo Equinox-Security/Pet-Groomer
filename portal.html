@@ -17,6 +17,9 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f7f0ec;margin:0;
 .portal-field label{display:block;font-size:0.78rem;font-weight:600;margin-bottom:0.3rem;}
 .portal-field input{width:100%;padding:0.65rem 0.8rem;border:1.5px solid #dcded8;border-radius:7px;font-size:0.9rem;box-sizing:border-box;}
 .portal-btn{width:100%;background:#e0785a;color:#fff;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;}
+.pw-toggle-wrap{position:relative;}
+.pw-toggle-wrap input{padding-right:2.5rem!important;}
+.pw-toggle-btn{position:absolute;right:0.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0.2rem;line-height:1;color:#9a8078;}
 .portal-btn:disabled{opacity:0.6;cursor:not-allowed;}
 .portal-error{font-size:0.8rem;color:#c0392b;margin-bottom:0.75rem;display:none;}
 .portal-success{font-size:0.8rem;color:#4a9d6e;background:#eaf6f0;border:1px solid #4a9d6e;border-radius:6px;padding:0.75rem;margin-bottom:0.75rem;display:none;}
@@ -38,8 +41,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f7f0ec;margin:0;
     <div class="portal-field"><label>Email</label><input type="email" id="reg-email"/></div>
     <div class="portal-field"><label>Phone <span style="font-weight:400;color:#9a8078;">(optional)</span></label><input type="tel" id="reg-phone"/></div>
     <div class="portal-field"><label>Choose a Username</label><input type="text" id="reg-user"/></div>
-    <div class="portal-field"><label>Choose a Password <span style="font-weight:400;color:#9a8078;">(8-20 letters/numbers)</span></label><input type="password" id="reg-pass"/></div>
-    <div class="portal-field"><label>Confirm Password</label><input type="password" id="reg-pass-confirm"/></div>
+    <div class="portal-field"><label>Choose a Password <span style="font-weight:400;color:#9a8078;">(8-20 letters/numbers)</span></label><div class="pw-toggle-wrap"><input type="password" id="reg-pass"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('reg-pass');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
+    <div class="portal-field"><label>Confirm Password</label><div class="pw-toggle-wrap"><input type="password" id="reg-pass-confirm"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('reg-pass-confirm');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
     <div class="portal-error" id="register-error"></div>
     <div class="portal-success" id="register-success">Your account request was submitted! It can take a few minutes for everything to fully take effect.</div>
     <button class="portal-btn" onclick="submitRegistration()">Create Account</button>
