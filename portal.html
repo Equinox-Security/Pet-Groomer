@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Client Portal - Sign In</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;background:#f7f0ec;margin:0;color:#2b1e1a;}
+.portal-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.portal-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:2.5rem;width:100%;max-width:400px;box-sizing:border-box;}
+.portal-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:1px solid #eee;}
+.portal-tab{flex:1;text-align:center;padding:0.6rem;font-size:0.85rem;font-weight:600;color:#9a8078;cursor:pointer;border-bottom:2px solid transparent;}
+.portal-tab.active{color:#e0785a;border-bottom-color:#e0785a;}
+.portal-panel{display:none;}
+.portal-panel.active{display:block;}
+.portal-field{margin-bottom:0.85rem;}
+.portal-field label{display:block;font-size:0.78rem;font-weight:600;margin-bottom:0.3rem;}
+.portal-field input{width:100%;padding:0.65rem 0.8rem;border:1.5px solid #dcded8;border-radius:7px;font-size:0.9rem;box-sizing:border-box;}
+.portal-btn{width:100%;background:#e0785a;color:#fff;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;}
+.portal-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.portal-error{font-size:0.8rem;color:#c0392b;margin-bottom:0.75rem;display:none;}
+.portal-success{font-size:0.8rem;color:#4a9d6e;background:#eaf6f0;border:1px solid #4a9d6e;border-radius:6px;padding:0.75rem;margin-bottom:0.75rem;display:none;}
+</style>
+</head>
+<body>
+<div class="portal-wrap"><div class="portal-card">
+  <div class="portal-tabs">
+    <div class="portal-tab active" onclick="switchTab('login')">Sign In</div>
+    <div class="portal-tab" onclick="switchTab('register')">Create Account</div>
+  </div>
+  <div class="portal-panel active" id="panel-login">
+    <div class="portal-field"><label>Username</label><input type="text" id="login-user"/></div>
+    <div class="portal-error" id="login-error"></div>
+    <button class="portal-btn" onclick="doLogin()">Sign In</button>
+  </div>
+  <div class="portal-panel" id="panel-register">
+    <div class="portal-field"><label>Your Name</label><input type="text" id="reg-name"/></div>
+    <div class="portal-field"><label>Email</label><input type="email" id="reg-email"/></div>
+    <div class="portal-field"><label>Phone <span style="font-weight:400;color:#9a8078;">(optional)</span></label><input type="tel" id="reg-phone"/></div>
+    <div class="portal-field"><label>Choose a Username</label><input type="text" id="reg-user"/></div>
+    <div class="portal-field"><label>Choose a Password <span style="font-weight:400;color:#9a8078;">(8-20 letters/numbers)</span></label><input type="password" id="reg-pass"/></div>
+    <div class="portal-field"><label>Confirm Password</label><input type="password" id="reg-pass-confirm"/></div>
+    <div class="portal-error" id="register-error"></div>
+    <div class="portal-success" id="register-success">Your account request was submitted! It can take a few minutes for everything to fully take effect.</div>
+    <button class="portal-btn" onclick="submitRegistration()">Create Account</button>
+  </div>
+</div></div>
+<script>
+var WORKER_URL="https://groom-forms.stealthmail.workers.dev";
+function switchTab(tab){
+  document.querySelectorAll('.portal-tab').forEach(function(t,i){ t.classList.toggle('active', (tab==='login'?i===0:i===1)); });
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+}
+async function doLogin(){
+  var user = document.getElementById('login-user').value.trim();
+  var err = document.getElementById('login-error');
+  err.style.display='none';
+  if (!user) { err.textContent='Please enter your username.'; err.style.display='block'; return; }
+  if (!WORKER_URL) { err.textContent='Sign-in is not available yet - please contact us directly.'; err.style.display='block'; return; }
+  var btn = document.querySelector('#panel-login .portal-btn');
+  if (btn) btn.disabled = true;
+  try {
+    var res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'lookup_username', username:user})});
+    if (res.ok) {
+      var data = await res.json();
+      window.location.href = data.portalId + '.html';
+      return;
+    } else {
+      err.textContent = 'Username not found. Please try again.';
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = 'Something went wrong. Please try again.';
+    err.style.display = 'block';
+  }
+  if (btn) btn.disabled = false;
+}
+async function submitRegistration(){
+  var name = document.getElementById('reg-name').value.trim();
+  var email = document.getElementById('reg-email').value.trim();
+  var phone = document.getElementById('reg-phone').value.trim();
+  var user = document.getElementById('reg-user').value.trim();
+  var pass = document.getElementById('reg-pass').value;
+  var passConfirm = document.getElementById('reg-pass-confirm').value;
+  var err = document.getElementById('register-error');
+  err.style.display = 'none';
+  if (!name || !email || !user || !pass || !passConfirm) { err.textContent='Please fill in all required fields.'; err.style.display='block'; return; }
+  if (!/^[a-zA-Z0-9]{8,20}$/.test(pass)) { err.textContent='Password must be 8-20 letters/numbers.'; err.style.display='block'; return; }
+  if (pass !== passConfirm) { err.textContent='Passwords do not match - please re-enter them.'; err.style.display='block'; return; }
+  if (!WORKER_URL) { err.textContent='Account creation is not available yet - please contact us directly.'; err.style.display='block'; return; }
+  var btn = document.querySelector('#panel-register .portal-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Creating account\u2026'; }
+  try {
+    var res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'register', name:name, email:email, phone:phone, username:user, password:pass})});
+    if (res.ok) {
+      document.getElementById('register-success').style.display = 'block';
+      ['reg-name','reg-email','reg-phone','reg-user','reg-pass','reg-pass-confirm'].forEach(function(id){ document.getElementById(id).value=''; });
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      err.textContent = errText || 'Something went wrong submitting your request. Please try again.';
+      err.style.display = 'block';
+    }
+  } catch(e) {
+    err.textContent = 'Something went wrong. Please try again.';
+    err.style.display = 'block';
+  }
+  if (btn) { btn.disabled = false; btn.textContent = 'Create Account'; }
+}
+document.getElementById('login-user').addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>
