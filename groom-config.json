@@ -65,8 +65,7 @@
     "placeholderPhoto": "1788339386256.png",
     "vaxExpiringThresholdDays": "30",
     "vaxRequiredTypes": [
-      "rabies",
-      "bordetella"
+      "rabies"
     ]
   }
 }
