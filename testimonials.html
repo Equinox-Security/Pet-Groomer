@@ -8,17 +8,15 @@
 *{box-sizing:border-box;}
 body{margin:0;font-family:system-ui,-apple-system,sans-serif;color:var(--text);background:#fff;}
 a{color:var(--accent);}
-header{background:var(--primary);color:#fff;}
-.nav-brand-row{display:flex;align-items:center;justify-content:center;padding:0.75rem 2rem 0.5rem;position:relative;border-bottom:3px solid var(--accent);}
+header{background:var(--primary);color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-bottom:3px solid var(--accent);}
 header .brand{font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#fff;text-decoration:none;}
-.nav-links-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;padding:0.5rem 2rem;border-top:1px solid rgba(255,255,255,0.12);}
-.nav-links-row a{color:rgba(255,255,255,0.85);text-decoration:none;margin:0 0.75rem;font-size:0.9rem;font-weight:600;}
-.nav-links-row a:hover{color:#fff;}
-.hamburger-btn{display:none;position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#fff;cursor:pointer;padding:0.25rem;}
+header nav a{color:rgba(255,255,255,0.85);text-decoration:none;margin-left:1.5rem;font-size:0.9rem;font-weight:600;}
+header nav a:hover{color:#fff;}
+.hamburger-btn{display:none;background:none;border:none;color:#fff;cursor:pointer;padding:0.25rem;}
 @media(max-width:720px){
-  .nav-links-row{display:none;flex-direction:column;border-top:1px solid rgba(255,255,255,0.15);}
-  .nav-links-row.open{display:flex;}
-  .nav-links-row a{margin:0;padding:0.6rem 0;}
+  header nav{display:none;width:100%;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,0.15);margin-top:0.75rem;padding-top:0.75rem;}
+  header nav.open{display:flex;}
+  header nav a{margin-left:0;padding:0.6rem 0;}
   .hamburger-btn{display:block;}
 }
 .hero{position:relative;overflow:hidden;min-height:320px;background:linear-gradient(135deg, #1a2a4a 77%, #4991df 100%);color:#fff;}
@@ -108,7 +106,7 @@ footer strong{color:#fff;}
 <meta name="theme-color" content="#1a2a4a"/>
 </head>
 <body>
-<header><div class="nav-brand-row"><a class="brand" href="index.html">Shear Pawfection Pet Grooming</a><button class="hamburger-btn" onclick="document.querySelector('header nav').classList.toggle('open');" aria-label="Menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div><nav class="nav-links-row"><a href="services.html">Services &amp; Pricing</a><a href="gallery.html">Before &amp; After</a><a href="testimonials.html">Reviews</a><a href="contact.html">Contact</a><a href="portal.html">Client Sign In</a><a href="#" onclick="installApp();return false;">&#8595; Install the App</a></nav></header>
+<header><a class="brand" href="index.html">Shear Pawfection Pet Grooming</a><button class="hamburger-btn" onclick="document.querySelector('header nav').classList.toggle('open');" aria-label="Menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><nav><a href="services.html">Services &amp; Pricing</a><a href="gallery.html">Before &amp; After</a><a href="testimonials.html">Reviews</a><a href="contact.html">Contact</a><a href="portal.html">Client Sign In</a><a href="#" onclick="installApp();return false;">&#8595; Install the App</a></nav></header>
 <div class="page-header"><h1>What Clients Say</h1></div>
 <div class="container"><div class="testimonials-grid"><p style="text-align:center;color:var(--text-muted);">No reviews yet - check back shortly.</p></div></div>
 <footer><strong>Shear Pawfection Pet Grooming</strong><br/>123 Main Street Lee NH<br/>603-555-1212 &middot; email@email.com</footer>
