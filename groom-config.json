@@ -51,7 +51,7 @@
     "heroOpacity": "100",
     "overlayTop": "20",
     "overlayBottom": "60",
-    "headerLayout": "centered",
+    "headerLayout": "offcenter",
     "headerPinstripe": true
   },
   "testimonials": [],
