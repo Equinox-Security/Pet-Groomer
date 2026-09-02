@@ -50,7 +50,9 @@
     "cardRadius": "10",
     "heroOpacity": "100",
     "overlayTop": "20",
-    "overlayBottom": "60"
+    "overlayBottom": "60",
+    "headerLayout": "centered",
+    "headerPinstripe": true
   },
   "testimonials": [],
   "site": {
