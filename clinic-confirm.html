@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vaccination Record Confirmation</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;background:#f4f5f7;margin:0;color:#222;}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:2.25rem;width:100%;max-width:440px;box-sizing:border-box;}
+h1{font-size:1.15rem;margin:0 0 1rem;}
+.detail-row{padding:0.5rem 0;border-bottom:1px solid #eee;font-size:0.9rem;}
+.detail-row strong{display:inline-block;min-width:110px;color:#555;}
+.btn{width:100%;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:0.6rem;}
+.btn-confirm{background:#2f6b3f;color:#fff;}
+.btn-correct{background:#c9820a;color:#fff;}
+.btn-deny{background:#a33;color:#fff;}
+.btn-secondary{background:#eee;color:#333;}
+.field{margin-top:0.85rem;}
+.field label{display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.3rem;}
+.field input{width:100%;padding:0.6rem 0.75rem;border:1.5px solid #ccc;border-radius:6px;font-size:0.9rem;box-sizing:border-box;}
+.msg{font-size:0.85rem;margin-top:0.75rem;display:none;}
+#step-correction, #step-done, #step-invalid, #step-error{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card">
+<div id="step-loading"><p>Loading…</p></div>
+<div id="step-invalid"><h1>Link No Longer Valid</h1><p style="font-size:0.9rem;color:#666;">This confirmation link has expired or has already been used. If you still need to confirm this record, please contact the groomer directly.</p></div>
+<div id="step-error"><h1>Something Went Wrong</h1><p style="font-size:0.9rem;color:#666;" id="error-text"></p></div>
+<div id="step-main">
+  <h1>Confirm Vaccination Record</h1>
+  <div class="detail-row"><strong>Pet</strong><span id="detail-pet"></span></div>
+  <div class="detail-row"><strong>Owner</strong><span id="detail-owner"></span></div>
+  <div class="detail-row"><strong>Vaccine</strong><span id="detail-vaccine"></span></div>
+  <div class="detail-row"><strong>Date given</strong><span id="detail-date"></span></div>
+  <div class="detail-row"><strong>Expires</strong><span id="detail-expiry"></span></div>
+  <button type="button" class="btn btn-confirm" onclick="submitOutcome('confirmed')">Yes, this is correct</button>
+  <button type="button" class="btn btn-correct" onclick="showCorrectionStep()">Yes, but a detail needs correcting</button>
+  <button type="button" class="btn btn-deny" onclick="submitOutcome('cannot_confirm')">No, cannot confirm this</button>
+  <div class="msg" id="main-msg"></div>
+</div>
+<div id="step-correction">
+  <h1>Correct the Date</h1>
+  <p style="font-size:0.85rem;color:#666;">If the vaccine type itself is wrong, please choose "No, cannot confirm this" instead and contact the groomer directly.</p>
+  <div class="field"><label>Correct date administered</label><input type="date" id="corrected-date"/></div>
+  <button type="button" class="btn btn-confirm" onclick="submitOutcome('confirmed_with_correction')">Submit Correction</button>
+  <button type="button" class="btn btn-secondary" onclick="hideCorrectionStep()">Back</button>
+  <div class="msg" id="correction-msg"></div>
+</div>
+<div id="step-done"><h1>Thank You</h1><p style="font-size:0.9rem;color:#666;" id="done-text"></p></div>
+</div></div>
+<script>
+var WORKER_URL="https://pet-groom-registration.stealthmail.workers.dev/";
+var TOKEN = new URLSearchParams(window.location.search).get('token') || '';
+var DETAILS = null;
+function showStep(id){
+  ['step-loading','step-invalid','step-error','step-main','step-correction','step-done'].forEach(function(s){
+    document.getElementById(s).style.display = (s === id) ? 'block' : 'none';
+  });
+}
+async function loadDetails(){
+  if (!TOKEN || !WORKER_URL) { showStep('step-invalid'); return; }
+  try {
+    var res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'get_clinic_confirmation_details', token: TOKEN }) });
+    if (!res.ok) { showStep('step-invalid'); return; }
+    DETAILS = await res.json();
+    document.getElementById('detail-pet').textContent = DETAILS.petName;
+    document.getElementById('detail-owner').textContent = DETAILS.ownerName;
+    document.getElementById('detail-vaccine').textContent = DETAILS.vaccineType === 'other' ? (DETAILS.vaccineTypeOther || 'Other') : DETAILS.vaccineType;
+    document.getElementById('detail-date').textContent = DETAILS.dateAdministered || '(not given)';
+    document.getElementById('detail-expiry').textContent = DETAILS.expirationDate || '(not given)';
+    document.getElementById('corrected-date').value = DETAILS.dateAdministered || '';
+    showStep('step-main');
+  } catch(e) {
+    showStep('step-invalid');
+  }
+}
+function showCorrectionStep(){ showStep('step-correction'); }
+function hideCorrectionStep(){ showStep('step-main'); }
+async function submitOutcome(outcome){
+  var payload = { action:'clinic_confirm_vaccination', token: TOKEN, outcome: outcome };
+  if (outcome === 'confirmed_with_correction') {
+    var correctedDate = document.getElementById('corrected-date').value;
+    if (!correctedDate) {
+      var msgEl = document.getElementById('correction-msg');
+      msgEl.style.display = 'block'; msgEl.style.color = '#a33'; msgEl.textContent = 'Please enter the correct date.';
+      return;
+    }
+    payload.correctedDate = correctedDate;
+  }
+  try {
+    var res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    if (res.ok) {
+      document.getElementById('done-text').textContent = 'Your response has been recorded. Thank you for confirming this record.';
+      showStep('step-done');
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      document.getElementById('error-text').textContent = errText || 'Something went wrong. Please try again, or contact the groomer directly.';
+      showStep('step-error');
+    }
+  } catch(e) {
+    document.getElementById('error-text').textContent = 'Something went wrong. Please try again, or contact the groomer directly.';
+    showStep('step-error');
+  }
+}
+loadDetails();
+</script>
+</body>
+</html>
