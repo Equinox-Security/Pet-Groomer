@@ -61,6 +61,7 @@
     "workerUrl": "https://pet-groom-registration.stealthmail.workers.dev/",
     "goatCounterCode": "",
     "imagesSubfolder": "images",
-    "pwaEnabled": true
+    "pwaEnabled": true,
+    "placeholderPhoto": ""
   }
 }
