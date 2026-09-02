@@ -15,7 +15,7 @@
     "testimonials": true,
     "portal": true,
     "appointments": true,
-    "reminders": false
+    "reminders": true
   },
   "services": [
     {
