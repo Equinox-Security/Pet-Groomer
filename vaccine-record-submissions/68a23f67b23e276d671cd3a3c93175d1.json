@@ -1,0 +1,12 @@
+{
+  "id": "68a23f67b23e276d671cd3a3c93175d1",
+  "portalId": "26aff6c564a782658ec8e114a8f623b9",
+  "petIndex": 0,
+  "vaccineType": "bordetella",
+  "vaccineTypeOther": "",
+  "dateAdministered": "2026-06-09",
+  "expirationDate": "2027-12-02",
+  "documentPath": "vaccine-record-submissions/68a23f67b23e276d671cd3a3c93175d1.jpg",
+  "notes": "2nd Vax",
+  "submittedAt": "2026-09-02T19:51:23.548Z"
+}
