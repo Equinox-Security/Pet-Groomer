@@ -59,6 +59,8 @@
     "ghOwner": "Equinox-Security",
     "ghRepo": "Pet-Groomer",
     "workerUrl": "https://pet-groom-registration.stealthmail.workers.dev/",
+    "formspreeId": "",
+    "formspreePaid": false,
     "goatCounterCode": "",
     "imagesSubfolder": "images",
     "pwaEnabled": true,
