@@ -6,6 +6,18 @@
 <title>Client Portal - Sign In</title>
 <style>
 :root{--primary:#471a75;--accent:#b8a2fb;--text-muted:#7a6258;--stone:#e9e4ee;}
+header{background:#471a75;color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-bottom:3px solid #b8a2fb;}
+header .brand{font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#fff;text-decoration:none;}
+header nav a{color:rgba(255,255,255,0.85);text-decoration:none;margin-left:1.5rem;font-size:0.9rem;font-weight:600;}
+header nav a:hover{color:#fff;}
+.hamburger-btn{display:none;background:none;border:none;color:#fff;cursor:pointer;padding:0.25rem;}
+@media(max-width:720px){
+  header nav{display:none;width:100%;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,0.15);margin-top:0.75rem;padding-top:0.75rem;}
+  header nav.open{display:flex;}
+  header nav a{margin-left:0;padding:0.6rem 0;}
+  .hamburger-btn{display:block;}
+}
+
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);margin:0;color:#2b1e1a;}
 .portal-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
 .portal-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:2.5rem;width:100%;max-width:400px;box-sizing:border-box;}
@@ -28,6 +40,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);marg
 </style>
 </head>
 <body>
+<header><a class="brand" href="index.html">Shear Pawfection Pet Grooming</a><button class="hamburger-btn" onclick="document.querySelector('header nav').classList.toggle('open');" aria-label="Menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><nav><a href="services.html">Services &amp; Pricing</a><a href="gallery.html">Before &amp; After</a><a href="testimonials.html">Reviews</a><a href="contact.html">Contact</a><a href="portal.html">Client Sign In</a><a href="#" onclick="installApp();return false;">&#8595; Install the App</a></nav></header>
+
 <div class="portal-wrap"><div class="portal-card">
   <div class="portal-tabs">
     <div class="portal-tab active" onclick="switchTab('login')">Sign In</div>
