@@ -68,6 +68,7 @@
     "vaxExpiringThresholdDays": "30",
     "vaxRequiredTypes": [
       "rabies"
-    ]
+    ],
+    "reminderDaysBefore": "1"
   }
 }
