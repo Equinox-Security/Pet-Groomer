@@ -72,7 +72,7 @@
     "reminderDaysBefore": "1",
     "booking": "",
     "selfServiceBooking": {
-      "enabled": false,
+      "enabled": true,
       "appointmentLengthMinutes": "60",
       "bufferMinutes": "0",
       "hours": [
