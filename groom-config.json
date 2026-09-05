@@ -112,7 +112,9 @@
           "end": "17:00"
         }
       ],
-      "blockedDates": []
+      "blockedDates": [],
+      "cancellationGraceHours": "48",
+      "cancellationPolicyMessage": "A 50% cancelation fee of the service cost will be charged if a client cancels within 48 hours of the scheduled appointment time and 100% cancelation fee of the service cost if canceled within 24 hours of appointment time per the terms of service agreed upon when making the appointment."
     }
   }
 }
