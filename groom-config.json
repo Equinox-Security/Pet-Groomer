@@ -20,13 +20,171 @@
   "services": [
     {
       "name": "Full Groom (small dog)",
-      "price": "$55",
+      "samePrice": false,
+      "priceSmall": "",
+      "priceMedium": "",
+      "priceLarge": "",
       "desc": "Bath, haircut, nail trim, ear cleaning"
     },
     {
       "name": "Full Groom (large dog)",
-      "price": "$95",
+      "samePrice": false,
+      "priceSmall": "",
+      "priceMedium": "",
+      "priceLarge": "",
       "desc": "Bath, haircut, nail trim, ear cleaning"
+    },
+    {
+      "name": "Bath & Blow-Dry",
+      "samePrice": false,
+      "priceSmall": "$25",
+      "priceMedium": "$35",
+      "priceLarge": "$50",
+      "desc": "Shampoo, conditioning rinse, blow-dry, and brush-out"
+    },
+    {
+      "name": "Full Grooming Haircut",
+      "samePrice": false,
+      "priceSmall": "$55",
+      "priceMedium": "$70",
+      "priceLarge": "$90",
+      "desc": "Bath, haircut, blow-dry, brushing, nail trim, and ear cleaning"
+    },
+    {
+      "name": "Brush-Out & De-Shedding",
+      "samePrice": false,
+      "priceSmall": "$30",
+      "priceMedium": "$45",
+      "priceLarge": "$65",
+      "desc": "Removes loose undercoat and reduces shedding"
+    },
+    {
+      "name": "Nail Trim",
+      "samePrice": false,
+      "priceSmall": "$15",
+      "priceMedium": "$18",
+      "priceLarge": "$22",
+      "desc": "Nail clipping or grinding"
+    },
+    {
+      "name": "Ear Cleaning",
+      "samePrice": false,
+      "priceSmall": "$10",
+      "priceMedium": "$12",
+      "priceLarge": "$15",
+      "desc": "Gentle cleaning of the outer ear area"
+    },
+    {
+      "name": "Teeth Brushing",
+      "samePrice": false,
+      "priceSmall": "$12",
+      "priceMedium": "$15",
+      "priceLarge": "$18",
+      "desc": "Pet-safe toothpaste and toothbrush treatment"
+    },
+    {
+      "name": "Paw Pad Trim",
+      "samePrice": false,
+      "priceSmall": "$12",
+      "priceMedium": "$15",
+      "priceLarge": "$18",
+      "desc": "Hair trimmed around paw pads"
+    },
+    {
+      "name": "Sanitary Trim",
+      "samePrice": false,
+      "priceSmall": "$15",
+      "priceMedium": "$20",
+      "priceLarge": "$25",
+      "desc": "Hygiene trim around sanitary areas"
+    },
+    {
+      "name": "Face Trim",
+      "samePrice": false,
+      "priceSmall": "$20",
+      "priceMedium": "$25",
+      "priceLarge": "$30",
+      "desc": "Light trim around the eyes, muzzle, and face"
+    },
+    {
+      "name": "Flea Bath Treatment",
+      "samePrice": false,
+      "priceSmall": "$20",
+      "priceMedium": "$30",
+      "priceLarge": "$40",
+      "desc": "Flea shampoo treatment and thorough rinse"
+    },
+    {
+      "name": "Medicated Bath",
+      "samePrice": false,
+      "priceSmall": "$25",
+      "priceMedium": "$35",
+      "priceLarge": "$50",
+      "desc": "Specialty bath using veterinarian-approved shampoo"
+    },
+    {
+      "name": "Nail Polish Add-On",
+      "samePrice": false,
+      "priceSmall": "$8",
+      "priceMedium": "$8",
+      "priceLarge": "$8",
+      "desc": "Pet-safe nail color"
+    },
+    {
+      "name": "*Fresh & Clean",
+      "samePrice": false,
+      "priceSmall": "$45",
+      "priceMedium": "$60",
+      "priceLarge": "$80",
+      "desc": "Bath, blow-dry, brush-out, nail trim, and ear cleaning"
+    },
+    {
+      "name": "*Full Spa Groom",
+      "samePrice": false,
+      "priceSmall": "$70",
+      "priceMedium": "$90",
+      "priceLarge": "$115",
+      "desc": "Bath, haircut, brush-out, nail trim, ear cleaning, and teeth brushing"
+    },
+    {
+      "name": "*Shed Control Package",
+      "samePrice": false,
+      "priceSmall": "$60",
+      "priceMedium": "$80",
+      "priceLarge": "$105",
+      "desc": "De-shedding treatment, bath, conditioner, blow-dry, and nail trim"
+    },
+    {
+      "name": "*Puppy’s First Groom",
+      "samePrice": false,
+      "priceSmall": "$40",
+      "priceMedium": "$50",
+      "priceLarge": "$65",
+      "desc": "Gentle bath, brush-out, face trim, nail trim, and ear cleaning"
+    },
+    {
+      "name": "*Quick Care Package",
+      "samePrice": false,
+      "priceSmall": "$35",
+      "priceMedium": "$45",
+      "priceLarge": "$55",
+      "desc": "Nail trim, ear cleaning, teeth brushing, and paw pad trim"
+    },
+    {
+      "name": "*Allergy Relief Package",
+      "samePrice": false,
+      "priceSmall": "$55",
+      "priceMedium": "$70",
+      "priceLarge": "$90",
+      "desc": "Medicated bath, conditioner, blow-dry, brush-out, and paw cleaning"
+    },
+    {
+      "name": "*Deluxe Spa Day",
+      "samePrice": false,
+      "priceSmall": "$85",
+      "priceMedium": "$110",
+      "priceLarge": "$140",
+      "desc": "Full haircut, de-shedding treatment, teeth brushing, paw pad trim, nail trim, and scented spritz"
     }
   ],
   "servicesPagePhotos": "service1.jfif, service2.jfif, service3.jfif, service4.jfif, service5.jfif",
