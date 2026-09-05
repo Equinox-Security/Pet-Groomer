@@ -30,7 +30,7 @@
     }
   ],
   "servicesPagePhotos": "service1.jfif, service2.jfif, service3.jfif, service4.jfif, service5.jfif",
-  "servicesSlideStyle": "blur-gradient",
+  "servicesSlideStyle": "blur",
   "vignetteOpacity": "50",
   "gallery": [
     {
