@@ -19,22 +19,6 @@
   },
   "services": [
     {
-      "name": "Full Groom (small dog)",
-      "samePrice": false,
-      "priceSmall": "",
-      "priceMedium": "",
-      "priceLarge": "",
-      "desc": "Bath, haircut, nail trim, ear cleaning"
-    },
-    {
-      "name": "Full Groom (large dog)",
-      "samePrice": false,
-      "priceSmall": "",
-      "priceMedium": "",
-      "priceLarge": "",
-      "desc": "Bath, haircut, nail trim, ear cleaning"
-    },
-    {
       "name": "Bath & Blow-Dry",
       "samePrice": false,
       "priceSmall": "$25",
