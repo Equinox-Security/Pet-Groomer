@@ -169,6 +169,78 @@
       "priceMedium": "$110",
       "priceLarge": "$140",
       "desc": "Full haircut, de-shedding treatment, teeth brushing, paw pad trim, nail trim, and scented spritz"
+    },
+    {
+      "name": "Blueberry facial",
+      "samePrice": true,
+      "priceSmall": "$10",
+      "priceMedium": "$10",
+      "priceLarge": "$10",
+      "desc": ""
+    },
+    {
+      "name": "Deep-conditioning treatment",
+      "samePrice": true,
+      "priceSmall": "$12",
+      "priceMedium": "$12",
+      "priceLarge": "$12",
+      "desc": ""
+    },
+    {
+      "name": "De-matting: Starting at",
+      "samePrice": true,
+      "priceSmall": "$15",
+      "priceMedium": "$15",
+      "priceLarge": "$15",
+      "desc": ""
+    },
+    {
+      "name": "Nail grinding",
+      "samePrice": true,
+      "priceSmall": "$5",
+      "priceMedium": "$5",
+      "priceLarge": "$5",
+      "desc": ""
+    },
+    {
+      "name": "Scented finishing spray",
+      "samePrice": true,
+      "priceSmall": "$5",
+      "priceMedium": "$5",
+      "priceLarge": "$5",
+      "desc": ""
+    },
+    {
+      "name": "Seasonal bandana or bow",
+      "samePrice": true,
+      "priceSmall": "$3",
+      "priceMedium": "$3",
+      "priceLarge": "$3",
+      "desc": ""
+    },
+    {
+      "name": "Extra brushing for heavy coatsStarting at:",
+      "samePrice": true,
+      "priceSmall": "$10",
+      "priceMedium": "$10",
+      "priceLarge": "$10",
+      "desc": ""
+    },
+    {
+      "name": "Difficult handling fee",
+      "samePrice": true,
+      "priceSmall": "$10–$25",
+      "priceMedium": "$10–$25",
+      "priceLarge": "$10–$25",
+      "desc": ""
+    },
+    {
+      "name": "Mobile grooming travel fee",
+      "samePrice": true,
+      "priceSmall": "$15–$35",
+      "priceMedium": "$15–$35",
+      "priceLarge": "$15–$35",
+      "desc": ""
     }
   ],
   "servicesPagePhotos": "service1.jfif, service2.jfif, service3.jfif, service4.jfif, service5.jfif",
