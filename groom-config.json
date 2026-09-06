@@ -316,6 +316,7 @@
       "rabies"
     ],
     "reminderDaysBefore": "1",
+    "tosContent": "",
     "booking": "",
     "selfServiceBooking": {
       "enabled": true,
