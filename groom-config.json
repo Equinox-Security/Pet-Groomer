@@ -20,6 +20,7 @@
   "services": [
     {
       "name": "Bath & Blow-Dry",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$25",
       "priceMedium": "$35",
@@ -28,6 +29,7 @@
     },
     {
       "name": "Full Grooming Haircut",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$55",
       "priceMedium": "$70",
@@ -36,6 +38,7 @@
     },
     {
       "name": "Brush-Out & De-Shedding",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$30",
       "priceMedium": "$45",
@@ -44,6 +47,7 @@
     },
     {
       "name": "Nail Trim",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$15",
       "priceMedium": "$18",
@@ -52,6 +56,7 @@
     },
     {
       "name": "Ear Cleaning",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$10",
       "priceMedium": "$12",
@@ -60,6 +65,7 @@
     },
     {
       "name": "Teeth Brushing",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$12",
       "priceMedium": "$15",
@@ -68,6 +74,7 @@
     },
     {
       "name": "Paw Pad Trim",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$12",
       "priceMedium": "$15",
@@ -76,6 +83,7 @@
     },
     {
       "name": "Sanitary Trim",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$15",
       "priceMedium": "$20",
@@ -84,6 +92,7 @@
     },
     {
       "name": "Face Trim",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$20",
       "priceMedium": "$25",
@@ -92,6 +101,7 @@
     },
     {
       "name": "Flea Bath Treatment",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$20",
       "priceMedium": "$30",
@@ -100,6 +110,7 @@
     },
     {
       "name": "Medicated Bath",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$25",
       "priceMedium": "$35",
@@ -108,6 +119,7 @@
     },
     {
       "name": "Nail Polish Add-On",
+      "category": "Individual Services",
       "samePrice": false,
       "priceSmall": "$8",
       "priceMedium": "$8",
@@ -115,7 +127,8 @@
       "desc": "Pet-safe nail color"
     },
     {
-      "name": "*Fresh & Clean",
+      "name": "Fresh & Clean",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$45",
       "priceMedium": "$60",
@@ -123,7 +136,8 @@
       "desc": "Bath, blow-dry, brush-out, nail trim, and ear cleaning"
     },
     {
-      "name": "*Full Spa Groom",
+      "name": "Full Spa Groom",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$70",
       "priceMedium": "$90",
@@ -131,7 +145,8 @@
       "desc": "Bath, haircut, brush-out, nail trim, ear cleaning, and teeth brushing"
     },
     {
-      "name": "*Shed Control Package",
+      "name": "Shed Control Package",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$60",
       "priceMedium": "$80",
@@ -139,7 +154,8 @@
       "desc": "De-shedding treatment, bath, conditioner, blow-dry, and nail trim"
     },
     {
-      "name": "*Puppy’s First Groom",
+      "name": "Puppy’s First Groom",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$40",
       "priceMedium": "$50",
@@ -147,7 +163,8 @@
       "desc": "Gentle bath, brush-out, face trim, nail trim, and ear cleaning"
     },
     {
-      "name": "*Quick Care Package",
+      "name": "Quick Care Package",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$35",
       "priceMedium": "$45",
@@ -155,7 +172,8 @@
       "desc": "Nail trim, ear cleaning, teeth brushing, and paw pad trim"
     },
     {
-      "name": "*Allergy Relief Package",
+      "name": "Allergy Relief Package",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$55",
       "priceMedium": "$70",
@@ -163,7 +181,8 @@
       "desc": "Medicated bath, conditioner, blow-dry, brush-out, and paw cleaning"
     },
     {
-      "name": "*Deluxe Spa Day",
+      "name": "Deluxe Spa Day",
+      "category": "Package Deals",
       "samePrice": false,
       "priceSmall": "$85",
       "priceMedium": "$110",
@@ -172,6 +191,7 @@
     },
     {
       "name": "Blueberry facial",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$10",
       "priceMedium": "$10",
@@ -180,6 +200,7 @@
     },
     {
       "name": "Deep-conditioning treatment",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$12",
       "priceMedium": "$12",
@@ -188,6 +209,7 @@
     },
     {
       "name": "De-matting: Starting at",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$15",
       "priceMedium": "$15",
@@ -196,6 +218,7 @@
     },
     {
       "name": "Nail grinding",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$5",
       "priceMedium": "$5",
@@ -204,6 +227,7 @@
     },
     {
       "name": "Scented finishing spray",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$5",
       "priceMedium": "$5",
@@ -212,6 +236,7 @@
     },
     {
       "name": "Seasonal bandana or bow",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$3",
       "priceMedium": "$3",
@@ -220,6 +245,7 @@
     },
     {
       "name": "Extra brushing for heavy coatsStarting at:",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$10",
       "priceMedium": "$10",
@@ -228,6 +254,7 @@
     },
     {
       "name": "Difficult handling fee",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$10–$25",
       "priceMedium": "$10–$25",
@@ -236,6 +263,7 @@
     },
     {
       "name": "Mobile grooming travel fee",
+      "category": "Add-Ons",
       "samePrice": true,
       "priceSmall": "$15–$35",
       "priceMedium": "$15–$35",
