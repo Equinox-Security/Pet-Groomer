@@ -316,6 +316,7 @@
       "rabies"
     ],
     "reminderDaysBefore": "1",
+    "appointmentRetentionDays": "60",
     "tosContent": "",
     "booking": "",
     "selfServiceBooking": {
