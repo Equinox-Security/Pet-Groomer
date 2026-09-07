@@ -5,26 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Pet Portal - Sign In</title>
 <style>
-body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;margin:0;color:#222222;}
-.back-link-wrap{max-width:360px;margin:0 auto;padding:1.5rem 2rem 0;text-align:center;}
-.back-link-wrap a{color:#4a4a4a;text-decoration:none;font-size:0.85rem;font-weight:600;}
+:root{--primary:#471a75;--primary-light:#e9e4ee;--accent:#b8a2fb;--text-muted:#7a6258;--stone:#e9e4ee;}
+header{background:#471a75;color:#fff;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-bottom:3px solid #b8a2fb;}
+header .brand{font-family:Georgia,serif;font-size:1.3rem;font-weight:700;color:#fff;text-decoration:none;}
+header nav a{color:rgba(255,255,255,0.85);text-decoration:none;margin-left:1.5rem;font-size:0.9rem;font-weight:600;}
+header nav a:hover{color:#fff;}
+.hamburger-btn{display:none;background:none;border:none;color:#fff;cursor:pointer;padding:0.25rem;}
+@media(max-width:720px){
+  header nav{display:none;width:100%;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,0.15);margin-top:0.75rem;padding-top:0.75rem;}
+  header nav.open{display:flex;}
+  header nav a{margin-left:0;padding:0.6rem 0;}
+  .hamburger-btn{display:block;}
+}
+
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);margin:0;color:#2b1e1a;}
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
 .login-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:2.5rem;width:100%;max-width:360px;text-align:center;box-sizing:border-box;}
-.login-card h2{margin-bottom:0.4rem;color:#4a4a4a;}
+.login-card h2{margin-bottom:0.4rem;color:var(--primary);}
 .login-card input{width:100%;padding:0.7rem 1rem;border:1.5px solid #dcded8;border-radius:7px;font-size:0.95rem;margin-bottom:0.85rem;box-sizing:border-box;}
 #portal-login-error{font-size:0.8rem;color:#c0392b;margin-bottom:0.75rem;display:none;}
-.login-btn{width:100%;background:#4a4a4a;color:#fff;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;}
+.login-btn{width:100%;background:var(--primary);color:#fff;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;}
 .pw-toggle-wrap{position:relative;}
 .pw-toggle-wrap input{padding-right:2.5rem!important;}
-.pw-toggle-btn{position:absolute;right:0.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0.2rem;line-height:1;color:#888888;}
+.pw-toggle-btn{position:absolute;right:0.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0.2rem;line-height:1;color:var(--text-muted);}
 #portal-mount{max-width:640px;margin:0 auto;padding:2rem;display:none;}
 .pet-card{background:#fff;border-radius:10px;padding:1.5rem;margin-bottom:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-@keyframes newMessagePulse{0%,100%{box-shadow:0 0 6px 1px #4a4a4a;}50%{box-shadow:0 0 18px 5px #4a4a4a;}}
+@keyframes newMessagePulse{0%,100%{box-shadow:0 0 6px 1px var(--primary);}50%{box-shadow:0 0 18px 5px var(--primary);}}
 .new-message-alert{animation:newMessagePulse 1.6s ease-in-out infinite;}
+.login-btn{background:linear-gradient(135deg, #471a75 77%, #b8a2fb 100%)!important;}
 </style>
 </head>
 <body>
-<div class="back-link-wrap"><a href="index.html">&larr; Back to Shear Pawfection Pet Grooming</a></div>
+<header><a class="brand" href="index.html">Shear Pawfection Pet Grooming</a><button class="hamburger-btn" onclick="document.querySelector('header nav').classList.toggle('open');" aria-label="Menu"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button><nav><a href="services.html">Services &amp; Pricing</a><a href="gallery.html">Before &amp; After</a><a href="testimonials.html">Reviews</a><a href="contact.html">Contact</a><a href="portal.html">Client Sign In</a><a href="#" onclick="installApp();return false;">&#8595; Install the App</a></nav></header>
+
 <div id="login-screen"><div class="login-card">
 <h2>Sign In</h2><p>Enter your password to view your pet's grooming records.</p>
 <div class="pw-toggle-wrap"><input type="password" id="portal-password" placeholder="Password"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('portal-password');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div>
@@ -34,58 +47,46 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;margin:0;
 <div id="portal-mount"></div>
 <script>
 var WRAP_CT="M9/Zc3UjCerVbVF+fwdA7CyrIzXu4h1FMPmJzt0a82kCoe0z0ZUqUyVVALwtk7F2";var WRAP_SALT="qOxZj2l8DLUx4qAdBoGhfg==";var WRAP_IV="6jvwPjstZ3bylwRm";
-var PAY_CT="g5PtxZ+xZ8Ivn00KOYN93BfJJaXzpTXP9xHvfzEogX2lt6Q3CJLRnf2YfGLKvgXHqXZHy8unOXnOCb1rdjBtMjQhHTxHBO1jpyfl5T7/1KlsZjY9pxHXwUnCcbv7SG8vc0DlqhNh+9u8K0yoegJdnG2qtDTkUY9gIZoVMg==";var PAY_IV="jyVJ8n+HQSu2asUv";
+var PAY_CT="k3LgzS8VdmUh8nse9qC3NGa1PZrlhVoPO0KGmiBFYT4avjBJtv8Z/LjgvJTGtGmXjBpspG37Jr1b1n7jRb0ZCFKjb4niRRfykXtYvYLJi0lD6k/OVzSsRMf9D6BIFiDVJKFK+X4H5fFChhxXnX/NevAdjpjWWwOxczhiHsZJNK8F8ZCFrLm64QYQdw+SHwB2BPPdntB6HFacuEMb+E4AjzvuuJ6ssmJQvzsA1BA5rTHFgeV0T4r7kTkOQludipNbYmbnj2znwjKCSHidgV8DkWgTW4eMkGIYw6grBwrQAnsyDmNq0pzg9XEMIdAE5s85ZWPyweXr5eZxsQZhgcdxaDrqgg+Gjgfaxusv95F6U3kOkDW/V80hPPXVRX11LAueU+UdT5TLfEXOf9xCV23X6+IyUPCgEC96I03F+nwguGZkw/SNf4KtNxwZyxgjEJqsu73PMf+4p8S5ydfscbzl6l8P/Sv/MT2xDpLtSmY9R6n/Wzm88ijZA+5pUp3v+w8UEea99A/SzyPqk2ayzwQs9x3i1l9eq3X8AJy5pCVy1AqEbrhh9wRAbVWeaNvZp5tPVDugD+aQeVhgafQqqOf8xeuNA/ONpXYravwW0Fscv8kkq1Pk548ApSs/gxJTILPRorFPZZlNnYxepI6sTxspXu6BhXlrSqNH4KqxITY6em5A8uwcv+1LouZtcqcewvMGGM6sudVwdIrcAwDw9hNzEkuXDJDJmHPHJeZz0hlPYveDjW1JAJ4gs1vzgkrW1BrzS0nEExxi+eTCc3DUBUIwYTp3UXHshgEaA48KLbWf2AeRlPVTgwoRMvwN7VV3yPa4oIMBJJ+XYoYcxM9uC5fz/Gk+lzJl3pT2ilbdsNwhhCMnlgyUgJImuiuSiHF6Z7Q9Kvc7dkIgeGYTI224AoYqTmzctP709whHWSsaZQtyHgl1FrP5Vg5rVSffvTwjDzUf9Gk6VH7AuTy0Wa94EOQRKIU9s716NlzgyPGcKas/iIv0HtVt4ihfPBWctLYuOPDwcqgrrHkTegknj41ExhMW7Z2SepBM/JpDA0VUBkGBvdgM7jadTq5A1+K1m7Dbh3lDD+QX7d8IneEIpgyOyP/YXCFaCp39uNlAZClQ/1ZqYWhcOtRjaAjEtvdTO6FJUmlxNABaC7jdT3OozH2+AgxKsgSKvOKbChzO8eH3KRak2VFaNEB19a81H5FufNqKGqHnvPRoTgjP80K52KcR4Fe2lgjCvrLNY9Y/dygkxS3GzpiVV2fjNYo=";var PAY_IV="Rw5WwxH13WdESPLi";
 var PBKDF2_ITERATIONS=100000;
 var PORTAL_ID="9df457c3568a508958a93ee9b14f375a";
 var BUSINESS_NAME="Shear Pawfection Pet Grooming";
-var PET_PHOTO_WORKER_URL="";
+var PET_PHOTO_WORKER_URL="https://pet-groom-registration.stealthmail.workers.dev/";
 var PLACEHOLDER_IMAGE_PATH="images/1788339386256.png";
 var VAX_EXPIRING_THRESHOLD_DAYS=30;
-var VAX_REQUIRED_TYPES=["rabies"];
 var SELF_SERVICE_BOOKING_ENABLED=true;
 var SERVICE_NAMES=[{"name":"Bath & Blow-Dry","category":"Individual Services"},{"name":"Full Grooming Haircut","category":"Individual Services"},{"name":"Brush-Out & De-Shedding","category":"Individual Services"},{"name":"Nail Trim","category":"Individual Services"},{"name":"Ear Cleaning","category":"Individual Services"},{"name":"Teeth Brushing","category":"Individual Services"},{"name":"Paw Pad Trim","category":"Individual Services"},{"name":"Sanitary Trim","category":"Individual Services"},{"name":"Face Trim","category":"Individual Services"},{"name":"Flea Bath Treatment","category":"Individual Services"},{"name":"Medicated Bath","category":"Individual Services"},{"name":"Nail Polish Add-On","category":"Individual Services"},{"name":"Fresh & Clean","category":"Package Deals"},{"name":"Full Spa Groom","category":"Package Deals"},{"name":"Shed Control Package","category":"Package Deals"},{"name":"Puppy’s First Groom","category":"Package Deals"},{"name":"Quick Care Package","category":"Package Deals"},{"name":"Allergy Relief Package","category":"Package Deals"},{"name":"Deluxe Spa Day","category":"Package Deals"},{"name":"Blueberry facial","category":"Add-Ons"},{"name":"Deep-conditioning treatment","category":"Add-Ons"},{"name":"De-matting: Starting at","category":"Add-Ons"},{"name":"Nail grinding","category":"Add-Ons"},{"name":"Scented finishing spray","category":"Add-Ons"},{"name":"Seasonal bandana or bow","category":"Add-Ons"},{"name":"Extra brushing for heavy coatsStarting at:","category":"Add-Ons"},{"name":"Difficult handling fee","category":"Add-Ons"},{"name":"Mobile grooming travel fee","category":"Add-Ons"}];
 var CANCELLATION_PARTIAL_FEE_HOURS=48;
 var CANCELLATION_PARTIAL_FEE_PERCENT=50;
 var CANCELLATION_FULL_FEE_HOURS=24;
 var CANCELLATION_FULL_FEE_PERCENT=100;
+// Only the required-vaccine-type list needs to travel into the generated
+// page - the rest of VACCINE_TYPES (labels, the "other" option) is purely
+// an admin-side data-entry concern, not needed to compute a status badge.
+var VAX_REQUIRED_TYPES=["rabies"];
 var PET_PHOTO_COOLDOWN_MS=3600000;
 function petPhotoCooldownKey(pi){return "groom_pet_photo_cd_"+PORTAL_ID+"_"+pi;}
 function petPhotoCooldownRemaining(pi){var until=parseInt(localStorage.getItem(petPhotoCooldownKey(pi))||"0",10);var rem=until-Date.now();return rem>0?rem:0;}
 function formatCooldownRemaining(ms){var mins=Math.ceil(ms/60000);if(mins<=1)return"a minute";if(mins<60)return mins+" minutes";var hrs=Math.floor(mins/60);var rem=mins%60;return hrs+(hrs===1?" hour":" hours")+(rem?" "+rem+" min":"");}
 function b64u(s){var b=atob(s);var u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
-var VAX_TYPE_LABELS_CLIENT = { rabies:'Rabies', bordetella:'Bordetella', dhpp:'DHPP', leptospirosis:'Leptospirosis' };
-var VAX_STATUS_LABELS_CLIENT = { pending:'Pending Review', approved:'Approved', needs_clarification:'Needs Clarification', rejected:'Rejected' };
-var VAX_STATUS_COLORS_CLIENT = { pending:'#888', approved:'#4a9d6e', needs_clarification:'#c9820a', rejected:'#c0392b' };
-function renderVaxRecordsHTML(records){
-  records = records || [];
-  var seenTypes = {};
-  var rows = records.map(function(v){
-    seenTypes[v.vaccineType] = true;
-    var typeLabel = v.vaccineType === 'other' ? (v.vaccineTypeOther || 'Other') : (VAX_TYPE_LABELS_CLIENT[v.vaccineType] || v.vaccineType);
-    var statusLabel = VAX_STATUS_LABELS_CLIENT[v.reviewStatus] || v.reviewStatus || 'Pending Review';
-    var statusColor = VAX_STATUS_COLORS_CLIENT[v.reviewStatus] || '#888';
-    var dates = [v.dateAdministered ? 'Given '+v.dateAdministered : '', v.expirationDate ? 'Expires '+v.expirationDate : ''].filter(Boolean).join(' · ');
-    return '<div style="padding:0.4rem 0;border-bottom:1px solid #eee;">'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+typeLabel+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+statusColor+';">'+statusLabel+'</span></div>'
-      + (dates ? '<div style="font-size:0.8rem;color:#666;">'+dates+'</div>' : '')
-      + '</div>';
-  });
-  VAX_REQUIRED_TYPES.forEach(function(type){
-    if (seenTypes[type]) return;
-    var label = VAX_TYPE_LABELS_CLIENT[type] || type;
-    rows.push('<div style="padding:0.4rem 0;border-bottom:1px solid #eee;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+label+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+VAX_BADGE_COLORS.missing+';">Missing — nothing submitted yet</span></div></div>');
-  });
-  return rows.length ? rows.join('') : '<div style="color:#999;">None on file</div>';
-}
 var VAX_BADGE_LABELS = { current:'Current', missing:'Missing', pending_review:'Pending Review', expiring_soon:'Expiring Soon', expired:'Expired' };
 var VAX_BADGE_COLORS = { current:'#4a9d6e', missing:'#c0392b', pending_review:'#888', expiring_soon:'#c9820a', expired:'#c0392b' };
+// Lower number = more severe. Expired and Missing are treated as equally
+// bad on purpose - a lapsed vaccine and no vaccine at all pose the same
+// practical risk, neither is meaningfully worse than the other.
 var VAX_BADGE_SEVERITY = { expired:0, missing:0, pending_review:1, expiring_soon:2, current:3 };
+
 function daysUntil(dateStr){
   if (!dateStr) return null;
   var today = new Date(); today.setHours(0,0,0,0);
   var target = new Date(dateStr + 'T00:00:00');
   return Math.round((target - today) / 86400000);
 }
+
+// Determines one vaccine TYPE's overall status from every record on file
+// for it - not just the most recently added one. A newer pending
+// resubmission correctly outranks an older expired-but-approved record,
+// since checking for any currently-valid approved record happens first.
 function computeVaxTypeStatus(recordsOfType, thresholdDays){
   if (!recordsOfType.length) return 'missing';
   var validApproved = recordsOfType.filter(function(r){
@@ -104,8 +105,13 @@ function computeVaxTypeStatus(recordsOfType, thresholdDays){
   if (pending.length) return 'pending_review';
   var hasExpiredApproved = recordsOfType.some(function(r){ return r.reviewStatus === 'approved' && r.expirationDate && daysUntil(r.expirationDate) < 0; });
   if (hasExpiredApproved) return 'expired';
-  return 'missing';
+  return 'missing'; // only rejected records exist, or nothing usable at all
 }
+
+// The pet-level badge is the worst status among every REQUIRED vaccine
+// type only - an optional type (currently DHPP, Leptospirosis) with
+// nothing submitted for it is left out of this entirely, not counted as
+// Missing, since it was never required in the first place.
 function computePetVaxBadge(records){
   var statuses = VAX_REQUIRED_TYPES.map(function(type){
     return computeVaxTypeStatus(records.filter(function(r){ return r.vaccineType === type; }), VAX_EXPIRING_THRESHOLD_DAYS);
@@ -114,9 +120,40 @@ function computePetVaxBadge(records){
   statuses.sort(function(a,b){ return VAX_BADGE_SEVERITY[a] - VAX_BADGE_SEVERITY[b]; });
   return statuses[0];
 }
+
 function renderVaxBadgeHTML(records){
   var status = computePetVaxBadge(records || []);
   return '<span style="font-size:0.72rem;font-weight:700;padding:0.15rem 0.55rem;border-radius:10px;background:'+VAX_BADGE_COLORS[status]+';color:#fff;">'+VAX_BADGE_LABELS[status]+'</span>';
+}
+
+var VAX_TYPE_LABELS_CLIENT = { rabies:'Rabies', bordetella:'Bordetella', dhpp:'DHPP', leptospirosis:'Leptospirosis' };
+var VAX_STATUS_LABELS_CLIENT = { pending:'Pending Review', approved:'Approved', needs_clarification:'Needs Clarification', rejected:'Rejected' };
+var VAX_STATUS_COLORS_CLIENT = { pending:'#888', approved:'#4a9d6e', needs_clarification:'#c9820a', rejected:'#c0392b' };
+function renderVaxRecordsHTML(records){
+  records = records || [];
+  var seenTypes = {};
+  var rows = records.map(function(v){
+    seenTypes[v.vaccineType] = true;
+    var typeLabel = v.vaccineType === 'other' ? (v.vaccineTypeOther || 'Other') : (VAX_TYPE_LABELS_CLIENT[v.vaccineType] || v.vaccineType);
+    var statusLabel = VAX_STATUS_LABELS_CLIENT[v.reviewStatus] || v.reviewStatus || 'Pending Review';
+    var statusColor = VAX_STATUS_COLORS_CLIENT[v.reviewStatus] || '#888';
+    var dates = [v.dateAdministered ? 'Given '+v.dateAdministered : '', v.expirationDate ? 'Expires '+v.expirationDate : ''].filter(Boolean).join(' · ');
+    return '<div style="padding:0.4rem 0;border-bottom:1px solid #eee;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+typeLabel+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+statusColor+';">'+statusLabel+'</span></div>'
+      + (dates ? '<div style="font-size:0.8rem;color:#666;">'+dates+'</div>' : '')
+      + '</div>';
+  });
+  // A required type with zero records anywhere is exactly what drives the
+  // pet-level badge to Missing, but until now that stayed invisible here -
+  // nothing in this list ever explained it, since the list only ever
+  // showed records that actually exist. Called out explicitly now, so
+  // "Missing" on the badge always has a visible reason right below it.
+  VAX_REQUIRED_TYPES.forEach(function(type){
+    if (seenTypes[type]) return;
+    var label = VAX_TYPE_LABELS_CLIENT[type] || type;
+    rows.push('<div style="padding:0.4rem 0;border-bottom:1px solid #eee;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+label+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+VAX_BADGE_COLORS.missing+';">Missing — nothing submitted yet</span></div></div>');
+  });
+  return rows.length ? rows.join('') : '<div style="color:#999;">None on file</div>';
 }
 // Not shown at all if the Worker isn't configured yet (matches the same
 // PET_PHOTO_WORKER_URL gate the pet-photo upload already uses) - no point
@@ -124,8 +161,8 @@ function renderVaxBadgeHTML(records){
 function renderVaxSubmitFormHTML(pi, petName){
   if (!PET_PHOTO_WORKER_URL) return '';
   return '<div style="margin-top:0.5rem;">'
-    + '<button type="button" onclick="toggleVaxSubmitForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Submit a Vaccination Record</button>'
-    + '<div id="vax-submit-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+    + '<button type="button" onclick="toggleVaxSubmitForm('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Submit a Vaccination Record</button>'
+    + '<div id="vax-submit-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:var(--stone);border-radius:8px;">'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vaccine</label><select id="vax-submit-type-'+pi+'" style="width:100%;padding:0.3rem;" onchange="toggleVaxSubmitOther('+pi+',this.value)">'
         + '<option value="rabies">Rabies</option><option value="bordetella">Bordetella</option><option value="dhpp">DHPP</option><option value="leptospirosis">Leptospirosis</option><option value="other">Other</option>'
       + '</select></div>'
@@ -135,7 +172,7 @@ function renderVaxSubmitFormHTML(pi, petName){
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Notes <span style="color:#999;">(optional)</span></label><input type="text" id="vax-submit-notes-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Photo, Scan, or PDF</label><input type="file" id="vax-submit-file-'+pi+'" accept="image/*,application/pdf" style="width:100%;"/></div>'
       + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.75rem;margin-bottom:0.6rem;"><input type="checkbox" id="vax-submit-cert-'+pi+'" style="margin-top:0.15rem;"/> I certify this document belongs to '+petName+'.</label>'
-      + '<button type="button" onclick="submitVaccinationRecord('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Submit</button>'
+      + '<button type="button" onclick="submitVaccinationRecord('+pi+')" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Submit</button>'
       + '<div id="vax-submit-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
     + '</div>'
   + '</div>';
@@ -144,17 +181,17 @@ function renderVetInfoAreaHTML(pi, vetName, vetContact){
   if (!PET_PHOTO_WORKER_URL) return '';
   var hasInfo = vetName || vetContact;
   var summary = hasInfo
-    ? '<div style="font-size:0.8rem;color:#666;margin-bottom:0.3rem;">' + (vetName || '(no clinic name on file)') + (vetContact ? ' — ' + vetContact : '') + '</div>'
+    ? '<div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.3rem;">' + (vetName || '(no clinic name on file)') + (vetContact ? ' — ' + vetContact : '') + '</div>'
     : '<div style="font-size:0.8rem;color:#999;margin-bottom:0.3rem;">No vet info on file yet.</div>';
   return '<div style="margin-top:0.75rem;">'
     + '<strong style="font-size:0.85rem;">Vet / Clinic Info</strong>'
     + summary
-    + '<button type="button" onclick="toggleVetInfoForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">Update Vet Info</button>'
-    + '<div id="vetinfo-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+    + '<button type="button" onclick="toggleVetInfoForm('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">Update Vet Info</button>'
+    + '<div id="vetinfo-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:var(--stone);border-radius:8px;">'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vet / Clinic Name</label><input type="text" id="vetinfo-name-'+pi+'" value="'+(vetName||'')+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vet Contact <span style="color:#999;">(email or phone)</span></label><input type="text" id="vetinfo-contact-'+pi+'" value="'+(vetContact||'')+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
       + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.78rem;margin-bottom:0.6rem;"><input type="checkbox" id="vetinfo-allpets-'+pi+'" style="margin-top:0.15rem;"/> Same for all my pets</label>'
-      + '<button type="button" onclick="submitVetInfo('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Save</button>'
+      + '<button type="button" onclick="submitVetInfo('+pi+')" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Save</button>'
       + '<div id="vetinfo-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
     + '</div>'
   + '</div>';
@@ -162,7 +199,7 @@ function renderVetInfoAreaHTML(pi, vetName, vetContact){
 function renderMedicalLogEntryHTML(pi, entry){
   var typeLabel = entry.type === 'medication' ? 'Medication' : 'Allergy';
   return '<div id="medlog-entry-'+entry.id+'" style="padding:0.4rem 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">'
-    + '<div><strong style="font-size:0.82rem;">'+typeLabel+':</strong> '+entry.name+(entry.notes?'<div style="font-size:0.78rem;color:#666;">'+entry.notes+'</div>':'')+'</div>'
+    + '<div><strong style="font-size:0.82rem;">'+typeLabel+':</strong> '+entry.name+(entry.notes?'<div style="font-size:0.78rem;color:var(--text-muted);">'+entry.notes+'</div>':'')+'</div>'
     + '<button type="button" onclick="removeMedicalLogEntry('+pi+',\''+entry.id+'\')" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:0.9rem;flex-shrink:0;" title="Remove">&times;</button>'
     + '</div>';
 }
@@ -173,13 +210,13 @@ function renderMedicalLogAreaHTML(pi, medicalLog){
   return '<div style="margin-top:0.75rem;">'
     + '<strong style="font-size:0.85rem;">Allergies &amp; Medications</strong>'
     + '<div id="medlog-list-'+pi+'" style="margin:0.4rem 0;">' + listHTML + '</div>'
-    + '<button type="button" onclick="toggleMedicalLogForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Add Allergy or Medication</button>'
-    + '<div id="medlog-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+    + '<button type="button" onclick="toggleMedicalLogForm('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Add Allergy or Medication</button>'
+    + '<div id="medlog-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:var(--stone);border-radius:8px;">'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Type</label><select id="medlog-type-'+pi+'" style="width:100%;padding:0.3rem;"><option value="allergy">Allergy</option><option value="medication">Medication</option></select></div>'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Name <span style="color:#999;">(e.g. "Lavender shampoo", "Apoquel 16mg")</span></label><input type="text" id="medlog-name-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
       + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Notes <span style="color:#999;">(optional)</span></label><input type="text" id="medlog-notes-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
       + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.75rem;margin-bottom:0.6rem;line-height:1.4;"><input type="checkbox" id="medlog-ack-'+pi+'" style="margin-top:0.15rem;flex-shrink:0;"/> I understand it is my responsibility to disclose all known allergies, medical conditions, and medications for my pet before any grooming service. '+BUSINESS_NAME+' relies on the accuracy and completeness of the information I provide, and is not responsible for reactions or complications arising from conditions I failed to disclose.</label>'
-      + '<button type="button" onclick="submitMedicalLogEntry('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Add</button>'
+      + '<button type="button" onclick="submitMedicalLogEntry('+pi+')" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Add</button>'
       + '<div id="medlog-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
     + '</div>'
   + '</div>';
@@ -193,11 +230,11 @@ function renderMedicalLogAreaHTML(pi, medicalLog){
 function renderMessagesAreaHTML(){
   if (!PET_PHOTO_WORKER_URL) return '';
   return '<div class="pet-card" id="messages-section" style="margin-top:1.5rem;">'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;"><h3 style="margin:0;font-family:Georgia,serif;color:#4a4a4a;">Messages</h3><button type="button" onclick="loadMessages(true)" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">&#8635; Check for Replies</button></div>'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;"><h3 style="margin:0;font-family:Georgia,serif;color:var(--primary);">Messages</h3><button type="button" onclick="loadMessages(true)" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">&#8635; Check for Replies</button></div>'
     + '<div id="messages-check-status" style="display:none;font-size:0.78rem;margin-bottom:0.5rem;text-align:right;"></div>'
     + '<div id="messages-list" style="max-height:340px;overflow-y:auto;margin-bottom:0.5rem;">Loading messages&hellip;</div>'
     + '<div id="close-conversation-area"></div>'
-    + '<div style="display:flex;gap:0.5rem;margin-top:0.5rem;"><textarea id="message-compose" placeholder="Send a message..." style="flex:1;padding:0.5rem;border-radius:6px;border:1.5px solid #dcded8;resize:vertical;min-height:50px;font-family:inherit;box-sizing:border-box;"></textarea><button type="button" onclick="sendMessage()" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.5rem 1rem;font-size:0.85rem;cursor:pointer;align-self:flex-end;">Send</button></div>'
+    + '<div style="display:flex;gap:0.5rem;margin-top:0.5rem;"><textarea id="message-compose" placeholder="Send a message..." style="flex:1;padding:0.5rem;border-radius:6px;border:1.5px solid #dcded8;resize:vertical;min-height:50px;font-family:inherit;box-sizing:border-box;"></textarea><button type="button" onclick="sendMessage()" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.5rem 1rem;font-size:0.85rem;cursor:pointer;align-self:flex-end;">Send</button></div>'
     + '<div id="message-status" style="display:none;font-size:0.78rem;margin-top:0.4rem;"></div>'
     + '<div id="past-conversations-area" style="margin-top:1rem;"></div>'
   + '</div>';
@@ -213,10 +250,10 @@ function renderMessagesListHTML(messages){
     var isStaff = m.from === 'staff';
     var label = isStaff ? 'From the groomer' : 'You';
     var align = isStaff ? 'flex-start' : 'flex-end';
-    var bg = isStaff ? '#f0f0f0' : '#ececec';
+    var bg = isStaff ? 'var(--stone)' : 'var(--primary-light)';
     return '<div style="display:flex;justify-content:'+align+';margin-bottom:0.5rem;">'
       + '<div style="max-width:80%;background:'+bg+';border-radius:10px;padding:0.6rem 0.85rem;">'
-      + '<div style="font-size:0.72rem;color:#666;margin-bottom:0.2rem;">'+label+'</div>'
+      + '<div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:0.2rem;">'+label+'</div>'
       + '<div style="font-size:0.85rem;white-space:pre-wrap;">'+m.text+'</div>'
       + '</div></div>';
   }).join('');
@@ -225,19 +262,15 @@ function formatThreadDate(iso){
   if (!iso) return '';
   try { return new Date(iso).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' }); } catch(e) { return ''; }
 }
-// Dated, collapsed by default - closed conversations stay findable
-// without swallowing the portal in one long, ever-growing chat. Each
-// one's own "Delete from my view" only ever hides it from what this
-// client sees - the underlying record is untouched either way.
 function renderPastThreadsHTML(pastThreads){
   var threads = pastThreads || [];
   if (!threads.length) return '';
-  return '<div style="border-top:1px solid #eee;padding-top:0.75rem;">'
+  return '<div style="border-top:1px solid var(--border);padding-top:0.75rem;">'
     + '<strong style="font-size:0.85rem;">Past Conversations</strong>'
     + threads.map(function(t){
         var count = (t.messages||[]).length;
         return '<div style="margin-top:0.5rem;">'
-          + '<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:0.4rem 0.6rem;background:#f5f5f5;border-radius:6px;" onclick="toggleThread(\''+t.id+'\')">'
+          + '<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:0.4rem 0.6rem;background:var(--stone);border-radius:6px;" onclick="toggleThread(\''+t.id+'\')">'
             + '<span style="font-size:0.82rem;">'+formatThreadDate(t.closedAt)+' ('+count+' message'+(count===1?'':'s')+')</span>'
             + '<span style="font-size:0.7rem;color:#999;">&#9660;</span>'
           + '</div>'
@@ -270,18 +303,13 @@ async function loadMessages(isManualCheck){
       listEl.innerHTML = renderMessagesListHTML(activeMsgs);
       listEl.scrollTop = listEl.scrollHeight;
       if (closeAreaEl) {
-        closeAreaEl.innerHTML = activeMsgs.length ? '<button type="button" onclick="closeConversation()" style="background:none;border:1px solid #999;color:#666;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">Close &amp; Archive This Conversation</button>' : '';
+        closeAreaEl.innerHTML = activeMsgs.length ? '<button type="button" onclick="closeConversation()" style="background:none;border:1px solid #999;color:var(--text-muted);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">Close &amp; Archive This Conversation</button>' : '';
       }
       if (pastAreaEl) pastAreaEl.innerHTML = renderPastThreadsHTML(data.pastThreads);
-      // Stateless, same idea as the admin's own "awaiting reply" check -
-      // if the newest message in the open conversation is from the
-      // groomer, the client hasn't answered it yet, so it's worth
-      // flagging prominently rather than leaving them to notice it only
-      // by scrolling all the way down on their own.
       if (bannerEl) {
         var lastMsg = activeMsgs.length ? activeMsgs[activeMsgs.length - 1] : null;
         bannerEl.innerHTML = (lastMsg && lastMsg.from === 'staff')
-          ? '<div class="new-message-alert" style="background:#fff3cd;border:2px solid #4a4a4a;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-size:0.9rem;font-weight:600;">&#128172; You have a new message from your groomer!</span><button type="button" onclick="scrollToMessages()" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">View Message</button></div>'
+          ? '<div class="new-message-alert" style="background:var(--primary-light);border:2px solid var(--primary);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-size:0.9rem;font-weight:600;">&#128172; You have a new message from your groomer!</span><button type="button" onclick="scrollToMessages()" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">View Message</button></div>'
           : '';
       }
       if (isManualCheck && checkStatusEl) {
@@ -348,12 +376,6 @@ async function hideThread(threadId){
     if (res.ok) await loadMessages();
   } catch(e) {}
 }
-// Extracted into its own function, not built inline in renderPortalData,
-// specifically so it can also be called after a successful booking or
-// cancellation to swap the whole block in place via outerHTML - the
-// static page's own baked-in payload never refreshes until staff
-// regenerates the site, so a booking made through the portal has to be
-// reflected by rebuilding this block client-side, not by reloading.
 function formatApptTime12h(hhmm){
   if (!hhmm) return '';
   var parts = hhmm.split(':');
@@ -379,19 +401,19 @@ function buildApptBlockHTML(pi, pet){
   var existingHTML = '';
   if (pet.nextApptDate) {
     var apptTimeStr = pet.nextApptTime ? ' ' + formatApptTime12h(pet.nextApptTime) : '';
-    existingHTML = '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:#ececec;border-radius:6px;padding:0.5rem 0.75rem;"><strong>Upcoming Appointment:</strong> '+pet.nextApptDate+apptTimeStr+(pet.nextApptReason?' - '+pet.nextApptReason:'')
+    existingHTML = '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:var(--primary-light);border-radius:6px;padding:0.5rem 0.75rem;"><strong>Upcoming Appointment:</strong> '+pet.nextApptDate+apptTimeStr+(pet.nextApptReason?' - '+pet.nextApptReason:'')
       + '<div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">'
-      + '<button type="button" onclick="addApptToCalendar('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">&#128197; Add to Calendar</button>'
-      + (PET_PHOTO_WORKER_URL ? '<span id="appt-reschedule-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'reschedule\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Reschedule</button></span>' : '')
-      + (PET_PHOTO_WORKER_URL ? '<span id="appt-cancel-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'cancel\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Cancel</button></span>' : '')
+      + '<button type="button" onclick="addApptToCalendar('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">&#128197; Add to Calendar</button>'
+      + (PET_PHOTO_WORKER_URL ? '<span id="appt-reschedule-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'reschedule\')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Reschedule</button></span>' : '')
+      + (PET_PHOTO_WORKER_URL ? '<span id="appt-cancel-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'cancel\')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Cancel</button></span>' : '')
       + '</div>'
       + '<div id="appt-calendar-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.4rem;"></div>'
       + '</div>';
   }
   var bookingHTML = (SELF_SERVICE_BOOKING_ENABLED && PET_PHOTO_WORKER_URL) ? (
     '<div style="margin-bottom:0.75rem;">'
-      + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(pet.nextApptDate?'Another ':'an ')+'Appointment</button>'
-      + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+      + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(pet.nextApptDate?'Another ':'an ')+'Appointment</button>'
+      + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:var(--stone);border-radius:8px;">'
       +   (SERVICE_NAMES.length ? ('<label style="font-size:0.85rem;font-weight:600;">Service</label><br/>'
       +   '<select id="booking-service-'+pi+'" onchange="toggleOtherServiceField('+pi+')" style="margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;">'
       +   '<option value="">Select a service...</option>'
@@ -402,7 +424,7 @@ function buildApptBlockHTML(pi, pet){
       +   '<label style="font-size:0.85rem;font-weight:600;">Pick a Date</label><br/>'
       +   '<input type="date" id="booking-date-'+pi+'" onchange="loadAvailableSlots('+pi+')" style="margin-top:0.4rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;"/>'
       +   '<div id="booking-slots-'+pi+'" style="margin-top:0.6rem;"></div>'
-      +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:#666;font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
+      +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:var(--text-muted);font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
       + '</div>'
       + '</div>'
   ) : '';
@@ -411,9 +433,9 @@ function buildApptBlockHTML(pi, pet){
 function renderPortalData(data){
   var pets = data.pets||[];
   var petSelectorHTML = pets.length > 1 ? (
-    '<div style="margin-bottom:1rem;"><div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:0.5rem;">Viewing information for:</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">'
+    '<div style="margin-bottom:1rem;"><div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Viewing information for:</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">'
     + pets.map(function(p,pi){
-        return '<button type="button" onclick="switchPortalPet('+pi+')" id="portal-pet-tab-'+pi+'" style="background:'+(pi===0?'#4a4a4a':'#fff')+';color:'+(pi===0?'#fff':'#4a4a4a')+';border:1.5px solid #4a4a4a;border-radius:100px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;"><ellipse cx="12" cy="16" rx="6" ry="5"/><ellipse cx="5" cy="8" rx="2.3" ry="3"/><ellipse cx="10.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="15.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="19" cy="8" rx="2.3" ry="3"/></svg> '+p.name+'</button>';
+        return '<button type="button" onclick="switchPortalPet('+pi+')" id="portal-pet-tab-'+pi+'" style="background:'+(pi===0?'var(--primary)':'#fff')+';color:'+(pi===0?'#fff':'var(--primary)')+';border:1.5px solid var(--primary);border-radius:100px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;"><ellipse cx="12" cy="16" rx="6" ry="5"/><ellipse cx="5" cy="8" rx="2.3" ry="3"/><ellipse cx="10.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="15.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="19" cy="8" rx="2.3" ry="3"/></svg> '+p.name+'</button>';
       }).join('')
     + '</div></div>'
   ) : '';
@@ -425,20 +447,20 @@ function renderPortalData(data){
       ? '<img src="'+p.photo+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover;"/>'
       : (PET_PHOTO_WORKER_URL ? (cdRem
           ? '<div style="width:52px;height:52px;border-radius:50%;background:#f3f4f6;border:1.5px dashed #999;display:flex;align-items:center;justify-content:center;flex-shrink:0;" title="You can add a photo of '+p.name+' again in '+formatCooldownRemaining(cdRem)+'"><svg width="18" height="18" fill="none" stroke="#999" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>'
-          : '<label style="width:52px;height:52px;border-radius:50%;background:#ececec;border:1.5px dashed #4a4a4a;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" title="Add a photo of '+p.name+'"><svg width="20" height="20" fill="none" stroke="#4a4a4a" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><input type="file" accept="image/*" style="display:none;" onchange="submitPetPhoto('+pi+',this)"/></label>')
+          : '<label style="width:52px;height:52px;border-radius:50%;background:var(--primary-light);border:1.5px dashed var(--primary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" title="Add a photo of '+p.name+'"><svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><input type="file" accept="image/*" style="display:none;" onchange="submitPetPhoto('+pi+',this)"/></label>')
         : '');
     var statusBlock = (!p.photo && PET_PHOTO_WORKER_URL)
       ? '<div id="pet-photo-status-'+pi+'" style="font-size:0.78rem;margin:0 0 0.75rem;color:#666;display:'+(cdRem?"block":"none")+';">'+(cdRem?("You can add another photo in "+formatCooldownRemaining(cdRem)+"."):"")+'</div>'
       : '';
     var bookLinks = [];
-    if (data.businessPhone) bookLinks.push('<a href="tel:'+data.businessPhone.replace(/[^0-9+]/g,'')+'" style="display:inline-block;background:#4a4a4a;color:#fff;text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#128222; Call to Book</a>');
-    if (data.businessEmail) bookLinks.push('<a href="mailto:'+data.businessEmail+'?subject='+encodeURIComponent('Appointment Request for '+p.name)+'" style="display:inline-block;background:none;color:#4a4a4a;border:1px solid #4a4a4a;text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#9993; Email to Book</a>');
-    if (PET_PHOTO_WORKER_URL) bookLinks.push('<button type="button" onclick="scrollToMessages()" style="display:inline-block;background:none;color:#4a4a4a;border:1px solid #4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128172; Message Your Groomer</button>');
+    if (data.businessPhone) bookLinks.push('<a href="tel:'+data.businessPhone.replace(/[^0-9+]/g,'')+'" style="display:inline-block;background:var(--primary);color:#fff;text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#128222; Call to Book</a>');
+    if (data.businessEmail) bookLinks.push('<a href="mailto:'+data.businessEmail+'?subject='+encodeURIComponent('Appointment Request for '+p.name)+'" style="display:inline-block;background:none;color:var(--primary);border:1px solid var(--primary);text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#9993; Email to Book</a>');
+    if (PET_PHOTO_WORKER_URL) bookLinks.push('<button type="button" onclick="scrollToMessages()" style="display:inline-block;background:none;color:var(--primary);border:1px solid var(--primary);border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128172; Message Your Groomer</button>');
     var bookButtonHTML = bookLinks.length ? '<div style="margin-bottom:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">' + bookLinks.join('') + '</div>' : '';
     return '<div class="pet-card" id="portal-pet-card-'+pi+'" style="display:'+(pi===0?'block':'none')+';">' +
       '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">' +
       photoBlock +
-      '<div><div style="font-family:Georgia,serif;font-size:1.1rem;font-weight:600;color:#4a4a4a;">'+p.name+'</div>' +
+      '<div><div style="font-family:Georgia,serif;font-size:1.1rem;font-weight:600;color:var(--primary);">'+p.name+'</div>' +
       '<div style="font-size:0.8rem;color:#666;">'+[p.breed,p.coatType,p.size].filter(Boolean).join(' \u00b7 ')+'</div></div></div>' +
       statusBlock +
       bookButtonHTML +
@@ -472,7 +494,7 @@ function renderPortalData(data){
       }).join('')
     + '</div>'
   ) : '';
-  return '<h1 style="font-size:1.4rem;color:#4a4a4a;font-family:Georgia,serif;">Welcome, '+data.name+'</h1>' + '<div id="new-reply-banner"></div>' + '<div id="appts-summary-wrap">' + summaryHTML + '</div>' + petSelectorHTML + petHTML + renderMessagesAreaHTML();
+  return '<h1 style="font-size:1.4rem;color:var(--primary);font-family:Georgia,serif;">Welcome, '+data.name+'</h1>' + '<div id="new-reply-banner"></div>' + '<div id="appts-summary-wrap">' + summaryHTML + '</div>' + petSelectorHTML + petHTML + renderMessagesAreaHTML();
 }
 // One pet card visible at a time rather than stacking every pet's full
 // data on the page at once - the whole point being the portal was
@@ -487,15 +509,15 @@ function switchPortalPet(sel){
     var tab=document.getElementById('portal-pet-tab-'+i);
     if(!card&&!tab)break;
     if(card)card.style.display=(i===sel?'block':'none');
-    if(tab){tab.style.background=(i===sel?'#4a4a4a':'#fff');tab.style.color=(i===sel?'#fff':'#4a4a4a');}
+    if(tab){tab.style.background=(i===sel?'var(--primary)':'#fff');tab.style.color=(i===sel?'#fff':'var(--primary)');}
     i++;
   }
 }
-// Placeholder photo (if configured) with a graceful paw-emoji fallback if
-// it's missing or 404s, matching the exact same improvement made in the
-// admin engine's own copy of this function - deliberately more than a
-// flat "no pets on file yet" line, since this is what a brand-new
-// self-registered client sees before staff has added anything real yet.
+// Placeholder photo (if one's configured) with a graceful paw-emoji
+// fallback if it's missing or 404s - deliberately more than a flat "no
+// pets on file yet" line, since this is the very first thing a
+// newly-registered client sees, often before staff has had a chance to
+// add anything real.
 function buildEmptyPetsHTML(){
   var img = PLACEHOLDER_IMAGE_PATH
     ? '<img src="'+PLACEHOLDER_IMAGE_PATH+'" alt="" style="max-width:200px;width:100%;border-radius:12px;margin:0 auto 1rem;display:block;" onerror="this.style.display=\'none\';document.getElementById(\'empty-state-fallback\').style.display=\'block\';"/>'
@@ -727,16 +749,16 @@ function refreshApptDisplaysFromReal(){
     var existingHTML = matching.map(function(a){
       var timeStr = a.startTime ? ' ' + formatApptTime12h(a.startTime) : '';
       var reasonStr = a.reason ? ' - ' + a.reason : '';
-      return '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:#ececec;border-radius:6px;padding:0.5rem 0.75rem;"><strong>Appointment:</strong> '+a.date+timeStr+reasonStr
+      return '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:var(--primary-light);border-radius:6px;padding:0.5rem 0.75rem;"><strong>Appointment:</strong> '+a.date+timeStr+reasonStr
         + '<div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">'
-        + '<button type="button" onclick="cancelSelfServiceAppt('+pi+',\''+a.id+'\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Cancel This Appointment</button>'
+        + '<button type="button" onclick="cancelSelfServiceAppt('+pi+',\''+a.id+'\')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Cancel This Appointment</button>'
         + '</div>'
         + '</div>';
     }).join('');
     var bookingHTML = (SELF_SERVICE_BOOKING_ENABLED && PET_PHOTO_WORKER_URL) ? (
       '<div style="margin-bottom:0.75rem;">'
-        + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(matching.length?'Another ':'an ')+'Appointment</button>'
-        + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+        + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(matching.length?'Another ':'an ')+'Appointment</button>'
+        + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:var(--stone);border-radius:8px;">'
         +   (SERVICE_NAMES.length ? ('<label style="font-size:0.85rem;font-weight:600;">Service</label><br/>'
         +   '<select id="booking-service-'+pi+'" onchange="toggleOtherServiceField('+pi+')" style="margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;">'
         +   '<option value="">Select a service...</option>'
@@ -747,7 +769,7 @@ function refreshApptDisplaysFromReal(){
         +   '<label style="font-size:0.85rem;font-weight:600;">Pick a Date</label><br/>'
         +   '<input type="date" id="booking-date-'+pi+'" onchange="loadAvailableSlots('+pi+')" style="margin-top:0.4rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;"/>'
         +   '<div id="booking-slots-'+pi+'" style="margin-top:0.6rem;"></div>'
-        +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:#666;font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
+        +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:var(--text-muted);font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
         + '</div>'
         + '</div>'
     ) : '';
@@ -801,7 +823,7 @@ async function loadAvailableSlots(pi){
     slotsEl.innerHTML = '';
     return;
   }
-  slotsEl.innerHTML = 'Checking available times\u2026';
+  slotsEl.innerHTML = 'Checking available times…';
   try {
     var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'get_available_slots', date:dateEl.value }) });
     if (res.ok) {
@@ -810,7 +832,7 @@ async function loadAvailableSlots(pi){
         slotsEl.innerHTML = '<div style="color:#666;font-size:0.85rem;">No times available that day. Try another date.</div>';
       } else {
         slotsEl.innerHTML = data.slots.map(function(s){
-          return '<button type="button" onclick="bookSlot('+pi+',\''+dateEl.value+'\',\''+s.start+'\')" style="margin:0.2rem 0.2rem 0 0;padding:0.4rem 0.7rem;border:1px solid #4a4a4a;border-radius:6px;background:#fff;cursor:pointer;font-size:0.82rem;font-family:inherit;">'+formatApptTime12h(s.start)+'</button>';
+          return '<button type="button" onclick="bookSlot('+pi+',\'' + dateEl.value + '\',\'' + s.start + '\')" style="margin:0.2rem 0.2rem 0 0;padding:0.4rem 0.7rem;border:1px solid var(--primary);border-radius:6px;background:#fff;cursor:pointer;font-size:0.82rem;font-family:inherit;">'+formatApptTime12h(s.start)+'</button>';
         }).join('');
       }
     } else {
@@ -867,7 +889,7 @@ async function bookSlot(pi, dateStr, startTime){
   }
   if (!confirm('Book '+pet.name+' for '+dateStr+' at '+formatApptTime12h(startTime)+(serviceName?' ('+serviceName+')':'')+'?')) return;
   var slotsEl = document.getElementById('booking-slots-'+pi);
-  if (slotsEl) slotsEl.innerHTML = 'Booking\u2026';
+  if (slotsEl) slotsEl.innerHTML = 'Booking…';
   try {
     var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'book_appointment', portalId:PORTAL_ID, petName:pet.name, date:dateStr, startTime:startTime, serviceName:serviceName }) });
     if (res.ok) {
@@ -890,6 +912,12 @@ async function bookSlot(pi, dateStr, startTime){
     if (slotsEl) slotsEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">Could not book that time.</div>';
   }
 }
+// Checked only for the client's own self-service cancel button - staff
+// cancelling from the admin already knows why they're cancelling and
+// doesn't need to be warned about their own action. Off entirely
+// (CANCELLATION_GRACE_HOURS is 0) unless the groomer has actually
+// configured a grace period, matching the "zero visible change until
+// deliberately enabled" pattern used throughout this feature.
 // Checked only for the client's own self-service cancel button - staff
 // cancelling from the admin already knows why they're cancelling and
 // doesn't need this warning. Full-fee window checked first since it's
@@ -943,11 +971,6 @@ async function cancelSelfServiceAppt(pi, appointmentId){
     }
   } catch(e) {}
 }
-// Reads from the global _portalPets set at login rather than passing
-// name/date as inline string arguments through onclick - avoids any
-// escaping concerns entirely (matches the existing bare-index pattern
-// already used for submitPetPhoto), since pet names/reasons are never
-// touched by the HTML/attribute layer this way.
 function requestApptChange(pi, kind){
   var pet = _portalPets[pi];
   var textEl = document.getElementById('message-compose');
@@ -960,11 +983,6 @@ function requestApptChange(pi, kind){
 function icsEscapeText(s){
   return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
 }
-// All-day event - nextApptDate is a plain YYYY-MM-DD date input with no
-// time component anywhere in the data model, so there's no real time to
-// build a timed event around. Pure client-side file generation, no
-// Worker involvement at all - works even for a groomer who never sets
-// up messaging.
 function addApptToCalendar(pi){
   var pet = _portalPets[pi];
   if (!pet || !pet.nextApptDate) return;
@@ -986,10 +1004,6 @@ function addApptToCalendar(pi){
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  // .ics downloads give no visible browser feedback on plenty of
-  // devices - unlike everything else in this portal, nothing here
-  // otherwise tells the client anything happened at all, which reads
-  // as broken and invites a confusing repeat download.
   if (statusEl) {
     statusEl.style.display = 'block';
     statusEl.style.color = '#4a9d6e';
