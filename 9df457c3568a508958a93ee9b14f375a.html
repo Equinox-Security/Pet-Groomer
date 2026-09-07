@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pet Portal - Sign In</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;margin:0;color:#222222;}
+.back-link-wrap{max-width:360px;margin:0 auto;padding:1.5rem 2rem 0;text-align:center;}
+.back-link-wrap a{color:#4a4a4a;text-decoration:none;font-size:0.85rem;font-weight:600;}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.08);padding:2.5rem;width:100%;max-width:360px;text-align:center;box-sizing:border-box;}
+.login-card h2{margin-bottom:0.4rem;color:#4a4a4a;}
+.login-card input{width:100%;padding:0.7rem 1rem;border:1.5px solid #dcded8;border-radius:7px;font-size:0.95rem;margin-bottom:0.85rem;box-sizing:border-box;}
+#portal-login-error{font-size:0.8rem;color:#c0392b;margin-bottom:0.75rem;display:none;}
+.login-btn{width:100%;background:#4a4a4a;color:#fff;padding:0.75rem 1rem;border-radius:7px;border:none;font-size:0.9rem;font-weight:600;cursor:pointer;}
+.pw-toggle-wrap{position:relative;}
+.pw-toggle-wrap input{padding-right:2.5rem!important;}
+.pw-toggle-btn{position:absolute;right:0.6rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;padding:0.2rem;line-height:1;color:#888888;}
+#portal-mount{max-width:640px;margin:0 auto;padding:2rem;display:none;}
+.pet-card{background:#fff;border-radius:10px;padding:1.5rem;margin-bottom:1.25rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+@keyframes newMessagePulse{0%,100%{box-shadow:0 0 6px 1px #4a4a4a;}50%{box-shadow:0 0 18px 5px #4a4a4a;}}
+.new-message-alert{animation:newMessagePulse 1.6s ease-in-out infinite;}
+</style>
+</head>
+<body>
+<div class="back-link-wrap"><a href="index.html">&larr; Back to Shear Pawfection Pet Grooming</a></div>
+<div id="login-screen"><div class="login-card">
+<h2>Sign In</h2><p>Enter your password to view your pet's grooming records.</p>
+<div class="pw-toggle-wrap"><input type="password" id="portal-password" placeholder="Password"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('portal-password');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div>
+<div id="portal-login-error">Incorrect password. Please try again.</div>
+<button class="login-btn" onclick="portalCheckPassword()">Sign In</button>
+</div></div>
+<div id="portal-mount"></div>
+<script>
+var WRAP_CT="M9/Zc3UjCerVbVF+fwdA7CyrIzXu4h1FMPmJzt0a82kCoe0z0ZUqUyVVALwtk7F2";var WRAP_SALT="qOxZj2l8DLUx4qAdBoGhfg==";var WRAP_IV="6jvwPjstZ3bylwRm";
+var PAY_CT="g5PtxZ+xZ8Ivn00KOYN93BfJJaXzpTXP9xHvfzEogX2lt6Q3CJLRnf2YfGLKvgXHqXZHy8unOXnOCb1rdjBtMjQhHTxHBO1jpyfl5T7/1KlsZjY9pxHXwUnCcbv7SG8vc0DlqhNh+9u8K0yoegJdnG2qtDTkUY9gIZoVMg==";var PAY_IV="jyVJ8n+HQSu2asUv";
+var PBKDF2_ITERATIONS=100000;
+var PORTAL_ID="9df457c3568a508958a93ee9b14f375a";
+var BUSINESS_NAME="Shear Pawfection Pet Grooming";
+var PET_PHOTO_WORKER_URL="";
+var PLACEHOLDER_IMAGE_PATH="images/1788339386256.png";
+var VAX_EXPIRING_THRESHOLD_DAYS=30;
+var VAX_REQUIRED_TYPES=["rabies"];
+var SELF_SERVICE_BOOKING_ENABLED=true;
+var SERVICE_NAMES=[{"name":"Bath & Blow-Dry","category":"Individual Services"},{"name":"Full Grooming Haircut","category":"Individual Services"},{"name":"Brush-Out & De-Shedding","category":"Individual Services"},{"name":"Nail Trim","category":"Individual Services"},{"name":"Ear Cleaning","category":"Individual Services"},{"name":"Teeth Brushing","category":"Individual Services"},{"name":"Paw Pad Trim","category":"Individual Services"},{"name":"Sanitary Trim","category":"Individual Services"},{"name":"Face Trim","category":"Individual Services"},{"name":"Flea Bath Treatment","category":"Individual Services"},{"name":"Medicated Bath","category":"Individual Services"},{"name":"Nail Polish Add-On","category":"Individual Services"},{"name":"Fresh & Clean","category":"Package Deals"},{"name":"Full Spa Groom","category":"Package Deals"},{"name":"Shed Control Package","category":"Package Deals"},{"name":"Puppy’s First Groom","category":"Package Deals"},{"name":"Quick Care Package","category":"Package Deals"},{"name":"Allergy Relief Package","category":"Package Deals"},{"name":"Deluxe Spa Day","category":"Package Deals"},{"name":"Blueberry facial","category":"Add-Ons"},{"name":"Deep-conditioning treatment","category":"Add-Ons"},{"name":"De-matting: Starting at","category":"Add-Ons"},{"name":"Nail grinding","category":"Add-Ons"},{"name":"Scented finishing spray","category":"Add-Ons"},{"name":"Seasonal bandana or bow","category":"Add-Ons"},{"name":"Extra brushing for heavy coatsStarting at:","category":"Add-Ons"},{"name":"Difficult handling fee","category":"Add-Ons"},{"name":"Mobile grooming travel fee","category":"Add-Ons"}];
+var CANCELLATION_PARTIAL_FEE_HOURS=48;
+var CANCELLATION_PARTIAL_FEE_PERCENT=50;
+var CANCELLATION_FULL_FEE_HOURS=24;
+var CANCELLATION_FULL_FEE_PERCENT=100;
+var PET_PHOTO_COOLDOWN_MS=3600000;
+function petPhotoCooldownKey(pi){return "groom_pet_photo_cd_"+PORTAL_ID+"_"+pi;}
+function petPhotoCooldownRemaining(pi){var until=parseInt(localStorage.getItem(petPhotoCooldownKey(pi))||"0",10);var rem=until-Date.now();return rem>0?rem:0;}
+function formatCooldownRemaining(ms){var mins=Math.ceil(ms/60000);if(mins<=1)return"a minute";if(mins<60)return mins+" minutes";var hrs=Math.floor(mins/60);var rem=mins%60;return hrs+(hrs===1?" hour":" hours")+(rem?" "+rem+" min":"");}
+function b64u(s){var b=atob(s);var u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+var VAX_TYPE_LABELS_CLIENT = { rabies:'Rabies', bordetella:'Bordetella', dhpp:'DHPP', leptospirosis:'Leptospirosis' };
+var VAX_STATUS_LABELS_CLIENT = { pending:'Pending Review', approved:'Approved', needs_clarification:'Needs Clarification', rejected:'Rejected' };
+var VAX_STATUS_COLORS_CLIENT = { pending:'#888', approved:'#4a9d6e', needs_clarification:'#c9820a', rejected:'#c0392b' };
+function renderVaxRecordsHTML(records){
+  records = records || [];
+  var seenTypes = {};
+  var rows = records.map(function(v){
+    seenTypes[v.vaccineType] = true;
+    var typeLabel = v.vaccineType === 'other' ? (v.vaccineTypeOther || 'Other') : (VAX_TYPE_LABELS_CLIENT[v.vaccineType] || v.vaccineType);
+    var statusLabel = VAX_STATUS_LABELS_CLIENT[v.reviewStatus] || v.reviewStatus || 'Pending Review';
+    var statusColor = VAX_STATUS_COLORS_CLIENT[v.reviewStatus] || '#888';
+    var dates = [v.dateAdministered ? 'Given '+v.dateAdministered : '', v.expirationDate ? 'Expires '+v.expirationDate : ''].filter(Boolean).join(' · ');
+    return '<div style="padding:0.4rem 0;border-bottom:1px solid #eee;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+typeLabel+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+statusColor+';">'+statusLabel+'</span></div>'
+      + (dates ? '<div style="font-size:0.8rem;color:#666;">'+dates+'</div>' : '')
+      + '</div>';
+  });
+  VAX_REQUIRED_TYPES.forEach(function(type){
+    if (seenTypes[type]) return;
+    var label = VAX_TYPE_LABELS_CLIENT[type] || type;
+    rows.push('<div style="padding:0.4rem 0;border-bottom:1px solid #eee;"><div style="display:flex;justify-content:space-between;align-items:center;"><strong>'+label+'</strong><span style="font-size:0.75rem;font-weight:600;color:'+VAX_BADGE_COLORS.missing+';">Missing — nothing submitted yet</span></div></div>');
+  });
+  return rows.length ? rows.join('') : '<div style="color:#999;">None on file</div>';
+}
+var VAX_BADGE_LABELS = { current:'Current', missing:'Missing', pending_review:'Pending Review', expiring_soon:'Expiring Soon', expired:'Expired' };
+var VAX_BADGE_COLORS = { current:'#4a9d6e', missing:'#c0392b', pending_review:'#888', expiring_soon:'#c9820a', expired:'#c0392b' };
+var VAX_BADGE_SEVERITY = { expired:0, missing:0, pending_review:1, expiring_soon:2, current:3 };
+function daysUntil(dateStr){
+  if (!dateStr) return null;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var target = new Date(dateStr + 'T00:00:00');
+  return Math.round((target - today) / 86400000);
+}
+function computeVaxTypeStatus(recordsOfType, thresholdDays){
+  if (!recordsOfType.length) return 'missing';
+  var validApproved = recordsOfType.filter(function(r){
+    return r.reviewStatus === 'approved' && (!r.expirationDate || daysUntil(r.expirationDate) >= 0);
+  }).sort(function(a,b){
+    if (!a.expirationDate) return -1;
+    if (!b.expirationDate) return 1;
+    return daysUntil(b.expirationDate) - daysUntil(a.expirationDate);
+  });
+  if (validApproved.length) {
+    var days = daysUntil(validApproved[0].expirationDate);
+    if (days === null) return 'current';
+    return days <= thresholdDays ? 'expiring_soon' : 'current';
+  }
+  var pending = recordsOfType.filter(function(r){ return r.reviewStatus === 'pending' || r.reviewStatus === 'needs_clarification'; });
+  if (pending.length) return 'pending_review';
+  var hasExpiredApproved = recordsOfType.some(function(r){ return r.reviewStatus === 'approved' && r.expirationDate && daysUntil(r.expirationDate) < 0; });
+  if (hasExpiredApproved) return 'expired';
+  return 'missing';
+}
+function computePetVaxBadge(records){
+  var statuses = VAX_REQUIRED_TYPES.map(function(type){
+    return computeVaxTypeStatus(records.filter(function(r){ return r.vaccineType === type; }), VAX_EXPIRING_THRESHOLD_DAYS);
+  });
+  if (!statuses.length) return 'current';
+  statuses.sort(function(a,b){ return VAX_BADGE_SEVERITY[a] - VAX_BADGE_SEVERITY[b]; });
+  return statuses[0];
+}
+function renderVaxBadgeHTML(records){
+  var status = computePetVaxBadge(records || []);
+  return '<span style="font-size:0.72rem;font-weight:700;padding:0.15rem 0.55rem;border-radius:10px;background:'+VAX_BADGE_COLORS[status]+';color:#fff;">'+VAX_BADGE_LABELS[status]+'</span>';
+}
+// Not shown at all if the Worker isn't configured yet (matches the same
+// PET_PHOTO_WORKER_URL gate the pet-photo upload already uses) - no point
+// showing a form that can't actually go anywhere.
+function renderVaxSubmitFormHTML(pi, petName){
+  if (!PET_PHOTO_WORKER_URL) return '';
+  return '<div style="margin-top:0.5rem;">'
+    + '<button type="button" onclick="toggleVaxSubmitForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Submit a Vaccination Record</button>'
+    + '<div id="vax-submit-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vaccine</label><select id="vax-submit-type-'+pi+'" style="width:100%;padding:0.3rem;" onchange="toggleVaxSubmitOther('+pi+',this.value)">'
+        + '<option value="rabies">Rabies</option><option value="bordetella">Bordetella</option><option value="dhpp">DHPP</option><option value="leptospirosis">Leptospirosis</option><option value="other">Other</option>'
+      + '</select></div>'
+      + '<div id="vax-submit-other-wrap-'+pi+'" style="display:none;margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Which vaccine</label><input type="text" id="vax-submit-other-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Date Administered <span style="color:#999;">(optional)</span></label><input type="date" id="vax-submit-dateadmin-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Expiration Date <span style="color:#999;">(optional)</span></label><input type="date" id="vax-submit-expiry-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Notes <span style="color:#999;">(optional)</span></label><input type="text" id="vax-submit-notes-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Photo, Scan, or PDF</label><input type="file" id="vax-submit-file-'+pi+'" accept="image/*,application/pdf" style="width:100%;"/></div>'
+      + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.75rem;margin-bottom:0.6rem;"><input type="checkbox" id="vax-submit-cert-'+pi+'" style="margin-top:0.15rem;"/> I certify this document belongs to '+petName+'.</label>'
+      + '<button type="button" onclick="submitVaccinationRecord('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Submit</button>'
+      + '<div id="vax-submit-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
+    + '</div>'
+  + '</div>';
+}
+function renderVetInfoAreaHTML(pi, vetName, vetContact){
+  if (!PET_PHOTO_WORKER_URL) return '';
+  var hasInfo = vetName || vetContact;
+  var summary = hasInfo
+    ? '<div style="font-size:0.8rem;color:#666;margin-bottom:0.3rem;">' + (vetName || '(no clinic name on file)') + (vetContact ? ' — ' + vetContact : '') + '</div>'
+    : '<div style="font-size:0.8rem;color:#999;margin-bottom:0.3rem;">No vet info on file yet.</div>';
+  return '<div style="margin-top:0.75rem;">'
+    + '<strong style="font-size:0.85rem;">Vet / Clinic Info</strong>'
+    + summary
+    + '<button type="button" onclick="toggleVetInfoForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">Update Vet Info</button>'
+    + '<div id="vetinfo-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vet / Clinic Name</label><input type="text" id="vetinfo-name-'+pi+'" value="'+(vetName||'')+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Vet Contact <span style="color:#999;">(email or phone)</span></label><input type="text" id="vetinfo-contact-'+pi+'" value="'+(vetContact||'')+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.78rem;margin-bottom:0.6rem;"><input type="checkbox" id="vetinfo-allpets-'+pi+'" style="margin-top:0.15rem;"/> Same for all my pets</label>'
+      + '<button type="button" onclick="submitVetInfo('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Save</button>'
+      + '<div id="vetinfo-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
+    + '</div>'
+  + '</div>';
+}
+function renderMedicalLogEntryHTML(pi, entry){
+  var typeLabel = entry.type === 'medication' ? 'Medication' : 'Allergy';
+  return '<div id="medlog-entry-'+entry.id+'" style="padding:0.4rem 0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">'
+    + '<div><strong style="font-size:0.82rem;">'+typeLabel+':</strong> '+entry.name+(entry.notes?'<div style="font-size:0.78rem;color:#666;">'+entry.notes+'</div>':'')+'</div>'
+    + '<button type="button" onclick="removeMedicalLogEntry('+pi+',\''+entry.id+'\')" style="background:none;border:none;color:#c0392b;cursor:pointer;font-size:0.9rem;flex-shrink:0;" title="Remove">&times;</button>'
+    + '</div>';
+}
+function renderMedicalLogAreaHTML(pi, medicalLog){
+  if (!PET_PHOTO_WORKER_URL) return '';
+  var entries = medicalLog || [];
+  var listHTML = entries.length ? entries.map(function(e){ return renderMedicalLogEntryHTML(pi, e); }).join('') : '<div class="medlog-empty" style="color:#999;font-size:0.85rem;">None on file yet.</div>';
+  return '<div style="margin-top:0.75rem;">'
+    + '<strong style="font-size:0.85rem;">Allergies &amp; Medications</strong>'
+    + '<div id="medlog-list-'+pi+'" style="margin:0.4rem 0;">' + listHTML + '</div>'
+    + '<button type="button" onclick="toggleMedicalLogForm('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.78rem;cursor:pointer;">+ Add Allergy or Medication</button>'
+    + '<div id="medlog-box-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Type</label><select id="medlog-type-'+pi+'" style="width:100%;padding:0.3rem;"><option value="allergy">Allergy</option><option value="medication">Medication</option></select></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Name <span style="color:#999;">(e.g. "Lavender shampoo", "Apoquel 16mg")</span></label><input type="text" id="medlog-name-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<div style="margin-bottom:0.4rem;"><label style="font-size:0.75rem;display:block;">Notes <span style="color:#999;">(optional)</span></label><input type="text" id="medlog-notes-'+pi+'" style="width:100%;padding:0.3rem;box-sizing:border-box;"/></div>'
+      + '<label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.75rem;margin-bottom:0.6rem;line-height:1.4;"><input type="checkbox" id="medlog-ack-'+pi+'" style="margin-top:0.15rem;flex-shrink:0;"/> I understand it is my responsibility to disclose all known allergies, medical conditions, and medications for my pet before any grooming service. '+BUSINESS_NAME+' relies on the accuracy and completeness of the information I provide, and is not responsible for reactions or complications arising from conditions I failed to disclose.</label>'
+      + '<button type="button" onclick="submitMedicalLogEntry('+pi+')" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 1rem;font-size:0.8rem;cursor:pointer;">Add</button>'
+      + '<div id="medlog-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.5rem;"></div>'
+    + '</div>'
+  + '</div>';
+}
+// One ongoing thread per client, not tied to any pet or appointment -
+// messages are client-level, not pet-level, so this mounts once at the
+// bottom of the portal rather than per pet card. Loaded live via a
+// separate fetch after login (loadMessages()), not baked into the
+// static payload - the whole point is a reply shows up without needing
+// a full site regeneration.
+function renderMessagesAreaHTML(){
+  if (!PET_PHOTO_WORKER_URL) return '';
+  return '<div class="pet-card" id="messages-section" style="margin-top:1.5rem;">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;"><h3 style="margin:0;font-family:Georgia,serif;color:#4a4a4a;">Messages</h3><button type="button" onclick="loadMessages(true)" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">&#8635; Check for Replies</button></div>'
+    + '<div id="messages-check-status" style="display:none;font-size:0.78rem;margin-bottom:0.5rem;text-align:right;"></div>'
+    + '<div id="messages-list" style="max-height:340px;overflow-y:auto;margin-bottom:0.5rem;">Loading messages&hellip;</div>'
+    + '<div id="close-conversation-area"></div>'
+    + '<div style="display:flex;gap:0.5rem;margin-top:0.5rem;"><textarea id="message-compose" placeholder="Send a message..." style="flex:1;padding:0.5rem;border-radius:6px;border:1.5px solid #dcded8;resize:vertical;min-height:50px;font-family:inherit;box-sizing:border-box;"></textarea><button type="button" onclick="sendMessage()" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.5rem 1rem;font-size:0.85rem;cursor:pointer;align-self:flex-end;">Send</button></div>'
+    + '<div id="message-status" style="display:none;font-size:0.78rem;margin-top:0.4rem;"></div>'
+    + '<div id="past-conversations-area" style="margin-top:1rem;"></div>'
+  + '</div>';
+}
+function scrollToMessages(){
+  var el = document.getElementById('messages-section');
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function renderMessagesListHTML(messages){
+  var msgs = messages || [];
+  if (!msgs.length) return '<div style="color:#999;font-size:0.85rem;">No messages yet.</div>';
+  return msgs.map(function(m){
+    var isStaff = m.from === 'staff';
+    var label = isStaff ? 'From the groomer' : 'You';
+    var align = isStaff ? 'flex-start' : 'flex-end';
+    var bg = isStaff ? '#f0f0f0' : '#ececec';
+    return '<div style="display:flex;justify-content:'+align+';margin-bottom:0.5rem;">'
+      + '<div style="max-width:80%;background:'+bg+';border-radius:10px;padding:0.6rem 0.85rem;">'
+      + '<div style="font-size:0.72rem;color:#666;margin-bottom:0.2rem;">'+label+'</div>'
+      + '<div style="font-size:0.85rem;white-space:pre-wrap;">'+m.text+'</div>'
+      + '</div></div>';
+  }).join('');
+}
+function formatThreadDate(iso){
+  if (!iso) return '';
+  try { return new Date(iso).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' }); } catch(e) { return ''; }
+}
+// Dated, collapsed by default - closed conversations stay findable
+// without swallowing the portal in one long, ever-growing chat. Each
+// one's own "Delete from my view" only ever hides it from what this
+// client sees - the underlying record is untouched either way.
+function renderPastThreadsHTML(pastThreads){
+  var threads = pastThreads || [];
+  if (!threads.length) return '';
+  return '<div style="border-top:1px solid #eee;padding-top:0.75rem;">'
+    + '<strong style="font-size:0.85rem;">Past Conversations</strong>'
+    + threads.map(function(t){
+        var count = (t.messages||[]).length;
+        return '<div style="margin-top:0.5rem;">'
+          + '<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:0.4rem 0.6rem;background:#f5f5f5;border-radius:6px;" onclick="toggleThread(\''+t.id+'\')">'
+            + '<span style="font-size:0.82rem;">'+formatThreadDate(t.closedAt)+' ('+count+' message'+(count===1?'':'s')+')</span>'
+            + '<span style="font-size:0.7rem;color:#999;">&#9660;</span>'
+          + '</div>'
+          + '<div id="thread-body-'+t.id+'" style="display:none;padding:0.5rem 0.25rem;">'
+            + renderMessagesListHTML(t.messages)
+            + '<button type="button" onclick="hideThread(\''+t.id+'\')" style="background:none;border:none;color:#c0392b;font-size:0.75rem;cursor:pointer;margin-top:0.3rem;">Delete from my view</button>'
+          + '</div>'
+        + '</div>';
+      }).join('')
+  + '</div>';
+}
+function toggleThread(id){
+  var body = document.getElementById('thread-body-'+id);
+  if (body) body.style.display = body.style.display === 'none' ? 'block' : 'none';
+}
+var _lastMessageCount = null;
+async function loadMessages(isManualCheck){
+  var listEl = document.getElementById('messages-list');
+  var checkStatusEl = document.getElementById('messages-check-status');
+  var closeAreaEl = document.getElementById('close-conversation-area');
+  var pastAreaEl = document.getElementById('past-conversations-area');
+  var bannerEl = document.getElementById('new-reply-banner');
+  if (!listEl || !PET_PHOTO_WORKER_URL) return;
+  if (isManualCheck && checkStatusEl) { checkStatusEl.style.display='block'; checkStatusEl.style.color='#666'; checkStatusEl.textContent='Checking\u2026'; }
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'get_messages', portalId:PORTAL_ID }) });
+    if (res.ok) {
+      var data = await res.json();
+      var activeMsgs = (data.activeThread && data.activeThread.messages) || [];
+      listEl.innerHTML = renderMessagesListHTML(activeMsgs);
+      listEl.scrollTop = listEl.scrollHeight;
+      if (closeAreaEl) {
+        closeAreaEl.innerHTML = activeMsgs.length ? '<button type="button" onclick="closeConversation()" style="background:none;border:1px solid #999;color:#666;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;">Close &amp; Archive This Conversation</button>' : '';
+      }
+      if (pastAreaEl) pastAreaEl.innerHTML = renderPastThreadsHTML(data.pastThreads);
+      // Stateless, same idea as the admin's own "awaiting reply" check -
+      // if the newest message in the open conversation is from the
+      // groomer, the client hasn't answered it yet, so it's worth
+      // flagging prominently rather than leaving them to notice it only
+      // by scrolling all the way down on their own.
+      if (bannerEl) {
+        var lastMsg = activeMsgs.length ? activeMsgs[activeMsgs.length - 1] : null;
+        bannerEl.innerHTML = (lastMsg && lastMsg.from === 'staff')
+          ? '<div class="new-message-alert" style="background:#fff3cd;border:2px solid #4a4a4a;border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-size:0.9rem;font-weight:600;">&#128172; You have a new message from your groomer!</span><button type="button" onclick="scrollToMessages()" style="background:#4a4a4a;color:#fff;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">View Message</button></div>'
+          : '';
+      }
+      if (isManualCheck && checkStatusEl) {
+        var newCount = _lastMessageCount === null ? 0 : activeMsgs.length - _lastMessageCount;
+        if (newCount > 0) {
+          checkStatusEl.style.color = '#4a9d6e';
+          checkStatusEl.textContent = newCount + ' new message' + (newCount===1?'':'s') + '.';
+        } else {
+          checkStatusEl.style.color = '#666';
+          checkStatusEl.textContent = 'No new replies yet.';
+        }
+      }
+      _lastMessageCount = activeMsgs.length;
+    } else {
+      listEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">Could not load messages.</div>';
+      if (isManualCheck && checkStatusEl) { checkStatusEl.style.display='block'; checkStatusEl.style.color='#c0392b'; checkStatusEl.textContent='Could not check for replies.'; }
+    }
+  } catch(e) {
+    listEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">Could not load messages.</div>';
+    if (isManualCheck && checkStatusEl) { checkStatusEl.style.display='block'; checkStatusEl.style.color='#c0392b'; checkStatusEl.textContent='Could not check for replies.'; }
+  }
+}
+async function sendMessage(){
+  var statusEl = document.getElementById('message-status');
+  var textEl = document.getElementById('message-compose');
+  var text = (textEl.value||'').trim();
+  if (!text) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Please enter a message.';} return; }
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Sending\u2026'; }
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'send_client_message', portalId:PORTAL_ID, text:text }) });
+    if (res.ok) {
+      textEl.value = '';
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent='Sent.'; }
+      await loadMessages();
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong. Please try again.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong. Please try again.'; }
+  }
+}
+async function closeConversation(){
+  if (!confirm('Close and archive this conversation? You can still view it later under Past Conversations.')) return;
+  var statusEl = document.getElementById('message-status');
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Closing\u2026'; }
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'close_thread', portalId:PORTAL_ID, closedBy:'client' }) });
+    if (res.ok) {
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent='Closed.'; }
+      await loadMessages();
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong.'; }
+  }
+}
+async function hideThread(threadId){
+  if (!confirm('Remove this conversation from your view? Staff will still be able to see it on their end.')) return;
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'hide_thread', portalId:PORTAL_ID, threadId:threadId }) });
+    if (res.ok) await loadMessages();
+  } catch(e) {}
+}
+// Extracted into its own function, not built inline in renderPortalData,
+// specifically so it can also be called after a successful booking or
+// cancellation to swap the whole block in place via outerHTML - the
+// static page's own baked-in payload never refreshes until staff
+// regenerates the site, so a booking made through the portal has to be
+// reflected by rebuilding this block client-side, not by reloading.
+function formatApptTime12h(hhmm){
+  if (!hhmm) return '';
+  var parts = hhmm.split(':');
+  var h = parseInt(parts[0], 10);
+  if (isNaN(h)) return '';
+  var m = parts[1] || '00';
+  var ampm = h >= 12 ? 'pm' : 'am';
+  var h12 = h % 12;
+  if (h12 === 0) h12 = 12;
+  return h12 + ':' + m + ampm;
+}
+// Renders the initial, baked-in view from the static payload -
+// possibly showing only one appointment if a pet genuinely has more
+// than one, since the static page has no way to know that at
+// generation time. Immediately upgraded to the complete, accurate
+// picture once loadMyAppointments' live fetch resolves (see
+// refreshApptDisplaysFromReal below) - this is only ever visible for
+// the brief moment before that happens. "Book an Appointment" is no
+// longer gated on whether one already exists - that mutual exclusion
+// was the entire mechanism silently preventing a client from ever
+// booking a second, genuinely separate appointment for the same pet.
+function buildApptBlockHTML(pi, pet){
+  var existingHTML = '';
+  if (pet.nextApptDate) {
+    var apptTimeStr = pet.nextApptTime ? ' ' + formatApptTime12h(pet.nextApptTime) : '';
+    existingHTML = '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:#ececec;border-radius:6px;padding:0.5rem 0.75rem;"><strong>Upcoming Appointment:</strong> '+pet.nextApptDate+apptTimeStr+(pet.nextApptReason?' - '+pet.nextApptReason:'')
+      + '<div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">'
+      + '<button type="button" onclick="addApptToCalendar('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">&#128197; Add to Calendar</button>'
+      + (PET_PHOTO_WORKER_URL ? '<span id="appt-reschedule-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'reschedule\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Reschedule</button></span>' : '')
+      + (PET_PHOTO_WORKER_URL ? '<span id="appt-cancel-area-'+pi+'"><button type="button" onclick="requestApptChange('+pi+',\'cancel\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Request to Cancel</button></span>' : '')
+      + '</div>'
+      + '<div id="appt-calendar-status-'+pi+'" style="display:none;font-size:0.78rem;margin-top:0.4rem;"></div>'
+      + '</div>';
+  }
+  var bookingHTML = (SELF_SERVICE_BOOKING_ENABLED && PET_PHOTO_WORKER_URL) ? (
+    '<div style="margin-bottom:0.75rem;">'
+      + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(pet.nextApptDate?'Another ':'an ')+'Appointment</button>'
+      + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+      +   (SERVICE_NAMES.length ? ('<label style="font-size:0.85rem;font-weight:600;">Service</label><br/>'
+      +   '<select id="booking-service-'+pi+'" onchange="toggleOtherServiceField('+pi+')" style="margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;">'
+      +   '<option value="">Select a service...</option>'
+      +   buildServiceOptionsHTML()
+      +   '<option value="__other__">Other (please describe)</option>'
+      +   '</select><br/>'
+      +   '<input type="text" id="booking-service-other-'+pi+'" placeholder="Describe what you need" style="display:none;margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;box-sizing:border-box;"/>') : '')
+      +   '<label style="font-size:0.85rem;font-weight:600;">Pick a Date</label><br/>'
+      +   '<input type="date" id="booking-date-'+pi+'" onchange="loadAvailableSlots('+pi+')" style="margin-top:0.4rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;"/>'
+      +   '<div id="booking-slots-'+pi+'" style="margin-top:0.6rem;"></div>'
+      +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:#666;font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
+      + '</div>'
+      + '</div>'
+  ) : '';
+  return '<div id="appt-block-'+pi+'">' + existingHTML + bookingHTML + '</div>';
+}
+function renderPortalData(data){
+  var pets = data.pets||[];
+  var petSelectorHTML = pets.length > 1 ? (
+    '<div style="margin-bottom:1rem;"><div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;color:#666;margin-bottom:0.5rem;">Viewing information for:</div><div style="display:flex;flex-wrap:wrap;gap:0.5rem;">'
+    + pets.map(function(p,pi){
+        return '<button type="button" onclick="switchPortalPet('+pi+')" id="portal-pet-tab-'+pi+'" style="background:'+(pi===0?'#4a4a4a':'#fff')+';color:'+(pi===0?'#fff':'#4a4a4a')+';border:1.5px solid #4a4a4a;border-radius:100px;padding:0.4rem 1rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:inherit;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;"><ellipse cx="12" cy="16" rx="6" ry="5"/><ellipse cx="5" cy="8" rx="2.3" ry="3"/><ellipse cx="10.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="15.5" cy="4.5" rx="2.3" ry="3"/><ellipse cx="19" cy="8" rx="2.3" ry="3"/></svg> '+p.name+'</button>';
+      }).join('')
+    + '</div></div>'
+  ) : '';
+  var petHTML = pets.length ? pets.map(function(p,pi){
+    var cdRem = petPhotoCooldownRemaining(pi);
+    var vax = renderVaxRecordsHTML(p.vaccinationRecords);
+    var hist = (p.groomingHistory||[]).slice().reverse().map(function(h){ return '<div style="padding:0.4rem 0;border-bottom:1px solid #eee;"><strong>'+(h.date||'')+'</strong> - '+(h.service||'')+(h.notes?'<div style="font-size:0.85rem;color:#666;">'+h.notes+'</div>':'')+'</div>'; }).join('') || '<div style="color:#999;">No visits on file yet</div>';
+    var photoBlock = p.photo
+      ? '<img src="'+p.photo+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover;"/>'
+      : (PET_PHOTO_WORKER_URL ? (cdRem
+          ? '<div style="width:52px;height:52px;border-radius:50%;background:#f3f4f6;border:1.5px dashed #999;display:flex;align-items:center;justify-content:center;flex-shrink:0;" title="You can add a photo of '+p.name+' again in '+formatCooldownRemaining(cdRem)+'"><svg width="18" height="18" fill="none" stroke="#999" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>'
+          : '<label style="width:52px;height:52px;border-radius:50%;background:#ececec;border:1.5px dashed #4a4a4a;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" title="Add a photo of '+p.name+'"><svg width="20" height="20" fill="none" stroke="#4a4a4a" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><input type="file" accept="image/*" style="display:none;" onchange="submitPetPhoto('+pi+',this)"/></label>')
+        : '');
+    var statusBlock = (!p.photo && PET_PHOTO_WORKER_URL)
+      ? '<div id="pet-photo-status-'+pi+'" style="font-size:0.78rem;margin:0 0 0.75rem;color:#666;display:'+(cdRem?"block":"none")+';">'+(cdRem?("You can add another photo in "+formatCooldownRemaining(cdRem)+"."):"")+'</div>'
+      : '';
+    var bookLinks = [];
+    if (data.businessPhone) bookLinks.push('<a href="tel:'+data.businessPhone.replace(/[^0-9+]/g,'')+'" style="display:inline-block;background:#4a4a4a;color:#fff;text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#128222; Call to Book</a>');
+    if (data.businessEmail) bookLinks.push('<a href="mailto:'+data.businessEmail+'?subject='+encodeURIComponent('Appointment Request for '+p.name)+'" style="display:inline-block;background:none;color:#4a4a4a;border:1px solid #4a4a4a;text-decoration:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;">&#9993; Email to Book</a>');
+    if (PET_PHOTO_WORKER_URL) bookLinks.push('<button type="button" onclick="scrollToMessages()" style="display:inline-block;background:none;color:#4a4a4a;border:1px solid #4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128172; Message Your Groomer</button>');
+    var bookButtonHTML = bookLinks.length ? '<div style="margin-bottom:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap;">' + bookLinks.join('') + '</div>' : '';
+    return '<div class="pet-card" id="portal-pet-card-'+pi+'" style="display:'+(pi===0?'block':'none')+';">' +
+      '<div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">' +
+      photoBlock +
+      '<div><div style="font-family:Georgia,serif;font-size:1.1rem;font-weight:600;color:#4a4a4a;">'+p.name+'</div>' +
+      '<div style="font-size:0.8rem;color:#666;">'+[p.breed,p.coatType,p.size].filter(Boolean).join(' \u00b7 ')+'</div></div></div>' +
+      statusBlock +
+      bookButtonHTML +
+      (p.temperament ? '<div style="margin-bottom:0.75rem;font-size:0.85rem;"><strong>Notes:</strong> '+p.temperament+'</div>' : '') +
+      (p.lastGroomDate ? '<div style="margin-bottom:0.75rem;font-size:0.85rem;"><strong>Last Groom:</strong> '+p.lastGroomDate+'</div>' : '') +
+      buildApptBlockHTML(pi, p) +
+      '<div style="margin-bottom:0.75rem;"><strong style="font-size:0.85rem;">Vaccinations</strong> '+renderVaxBadgeHTML(p.vaccinationRecords)+vax+renderVaxSubmitFormHTML(pi,p.name)+'</div>' +
+      renderVetInfoAreaHTML(pi, p.vetName, p.vetContact) +
+      renderMedicalLogAreaHTML(pi, p.medicalLog) +
+      '<div><strong style="font-size:0.85rem;">Grooming History</strong>'+hist+'</div>' +
+      '</div>';
+  }).join('') : buildEmptyPetsHTML();
+  // Shown only with multiple pets - a single pet's own card is already
+  // visible by default with nothing to click, so this would just be
+  // redundant there. With more than one, only the first pet's card
+  // shows at first - an appointment on pet #2 or #3 could otherwise go
+  // completely unseen unless that specific tab gets clicked, which is
+  // exactly the scenario a groomer wants to avoid a client later
+  // claiming they never saw. Each line is clickable, jumping straight
+  // to that pet's own card via the same tab-switching this page
+  // already uses, so this is a shortcut to the detail, not a
+  // duplicate of it.
+  var upcomingPets = pets.map(function(p,pi){ return { p: p, pi: pi }; }).filter(function(x){ return x.p.nextApptDate; });
+  var summaryHTML = (pets.length > 1 && upcomingPets.length) ? (
+    '<div style="background:#fff8e6;border:1.5px solid #d4a017;border-radius:8px;padding:0.85rem 1rem;margin-bottom:1rem;">'
+    + '<div style="font-weight:700;font-size:0.85rem;color:#4a4a4a;margin-bottom:0.4rem;">Upcoming Appointments</div>'
+    + upcomingPets.map(function(x){
+        var timeStr = x.p.nextApptTime ? ' ' + formatApptTime12h(x.p.nextApptTime) : '';
+        var reasonStr = x.p.nextApptReason ? ' - ' + x.p.nextApptReason : '';
+        return '<div style="font-size:0.85rem;padding:0.25rem 0;cursor:pointer;" onclick="switchPortalPet('+x.pi+')"><strong style="text-decoration:underline;">'+x.p.name+'</strong>: '+x.p.nextApptDate+timeStr+reasonStr+'</div>';
+      }).join('')
+    + '</div>'
+  ) : '';
+  return '<h1 style="font-size:1.4rem;color:#4a4a4a;font-family:Georgia,serif;">Welcome, '+data.name+'</h1>' + '<div id="new-reply-banner"></div>' + '<div id="appts-summary-wrap">' + summaryHTML + '</div>' + petSelectorHTML + petHTML + renderMessagesAreaHTML();
+}
+// One pet card visible at a time rather than stacking every pet's full
+// data on the page at once - the whole point being the portal was
+// getting heavy even with just 2 pets. Messages section always renders
+// right after the pet cards in document order, so with only one card
+// ever visible, it naturally ends up directly below whichever pet is
+// currently open - no separate logic needed to reposition it.
+function switchPortalPet(sel){
+  var i=0;
+  while(true){
+    var card=document.getElementById('portal-pet-card-'+i);
+    var tab=document.getElementById('portal-pet-tab-'+i);
+    if(!card&&!tab)break;
+    if(card)card.style.display=(i===sel?'block':'none');
+    if(tab){tab.style.background=(i===sel?'#4a4a4a':'#fff');tab.style.color=(i===sel?'#fff':'#4a4a4a');}
+    i++;
+  }
+}
+// Placeholder photo (if configured) with a graceful paw-emoji fallback if
+// it's missing or 404s, matching the exact same improvement made in the
+// admin engine's own copy of this function - deliberately more than a
+// flat "no pets on file yet" line, since this is what a brand-new
+// self-registered client sees before staff has added anything real yet.
+function buildEmptyPetsHTML(){
+  var img = PLACEHOLDER_IMAGE_PATH
+    ? '<img src="'+PLACEHOLDER_IMAGE_PATH+'" alt="" style="max-width:200px;width:100%;border-radius:12px;margin:0 auto 1rem;display:block;" onerror="this.style.display=\'none\';document.getElementById(\'empty-state-fallback\').style.display=\'block\';"/>'
+    : '';
+  var fallbackDisplay = PLACEHOLDER_IMAGE_PATH ? 'none' : 'block';
+  return '<div style="text-align:center;padding:2rem 1rem;">'
+    + img
+    + '<div id="empty-state-fallback" style="display:'+fallbackDisplay+';font-size:3rem;margin-bottom:0.5rem;">&#128062;</div>'
+    + '<p style="color:#888;margin:0;">Nothing to groom here yet — check back once your groomer adds your pet\'s info.</p>'
+    + '</div>';
+}
+async function submitPetPhoto(pi,inputEl){
+  var statusEl = document.getElementById('pet-photo-status-'+pi);
+  if (!PET_PHOTO_WORKER_URL) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Photo uploads are not available yet \u2014 please contact us directly.';} return; }
+  var cdRem = petPhotoCooldownRemaining(pi);
+  if (cdRem > 0) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#666';statusEl.textContent='You can add another photo in '+formatCooldownRemaining(cdRem)+'.';} return; }
+  var file = inputEl.files && inputEl.files[0];
+  if (!file) return;
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Uploading\u2026'; }
+  try {
+    var dataUrl = await new Promise(function(resolve,reject){
+      var reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result); };
+      reader.onerror = function(){ reject(new Error('Could not read the selected photo.')); };
+      reader.readAsDataURL(file);
+    });
+    var commaIdx = dataUrl.indexOf(',');
+    var payload = { action:'submit_pet_photo', portalId:PORTAL_ID, petIndex:pi, photo:dataUrl.slice(commaIdx+1), photoType:file.type };
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      inputEl.disabled = true;
+      localStorage.setItem(petPhotoCooldownKey(pi), String(Date.now()+PET_PHOTO_COOLDOWN_MS));
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent='Thanks! Your photo was sent and will show here once approved.'; }
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong. Please try again.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong. Please try again.'; }
+  }
+}
+function toggleVaxSubmitForm(pi){
+  var box = document.getElementById('vax-submit-box-'+pi);
+  if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+function toggleVaxSubmitOther(pi, val){
+  var w = document.getElementById('vax-submit-other-wrap-'+pi);
+  if (w) w.style.display = (val === 'other') ? 'block' : 'none';
+}
+async function submitVaccinationRecord(pi){
+  var statusEl = document.getElementById('vax-submit-status-'+pi);
+  if (!PET_PHOTO_WORKER_URL) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Submissions are not available yet \u2014 please contact us directly.';} return; }
+  var typeEl = document.getElementById('vax-submit-type-'+pi);
+  var otherEl = document.getElementById('vax-submit-other-'+pi);
+  var dateAdminEl = document.getElementById('vax-submit-dateadmin-'+pi);
+  var expiryEl = document.getElementById('vax-submit-expiry-'+pi);
+  var notesEl = document.getElementById('vax-submit-notes-'+pi);
+  var fileEl = document.getElementById('vax-submit-file-'+pi);
+  var certEl = document.getElementById('vax-submit-cert-'+pi);
+  var file = fileEl.files && fileEl.files[0];
+  if (!file) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Please attach a photo, scan, or PDF.';} return; }
+  if (!certEl.checked) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Please check the certification box before submitting.';} return; }
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Uploading\u2026'; }
+  try {
+    var dataUrl = await new Promise(function(resolve,reject){
+      var reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result); };
+      reader.onerror = function(){ reject(new Error('Could not read the selected file.')); };
+      reader.readAsDataURL(file);
+    });
+    var commaIdx = dataUrl.indexOf(',');
+    var payload = {
+      action:'submit_vaccination_record', portalId:PORTAL_ID, petIndex:pi,
+      vaccineType: typeEl.value, vaccineTypeOther: otherEl.value,
+      dateAdministered: dateAdminEl.value, expirationDate: expiryEl.value,
+      notes: notesEl.value, certified: true,
+      document: dataUrl.slice(commaIdx+1), documentType: file.type
+    };
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent='Thanks! Your document was sent and will show here once reviewed.'; }
+      typeEl.value = 'rabies'; otherEl.value=''; dateAdminEl.value=''; expiryEl.value=''; notesEl.value=''; fileEl.value=''; certEl.checked=false;
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong. Please try again.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong. Please try again.'; }
+  }
+}
+function toggleVetInfoForm(pi){
+  var box = document.getElementById('vetinfo-box-'+pi);
+  if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+async function submitVetInfo(pi){
+  var statusEl = document.getElementById('vetinfo-status-'+pi);
+  if (!PET_PHOTO_WORKER_URL) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Updates are not available yet \u2014 please contact us directly.';} return; }
+  var nameEl = document.getElementById('vetinfo-name-'+pi);
+  var contactEl = document.getElementById('vetinfo-contact-'+pi);
+  var allPetsEl = document.getElementById('vetinfo-allpets-'+pi);
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Saving\u2026'; }
+  try {
+    var payload = { action:'update_vet_info', portalId:PORTAL_ID, petIndex:pi, vetName: nameEl.value, vetContact: contactEl.value, applyToAllPets: !!(allPetsEl && allPetsEl.checked) };
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      var data = await res.json().catch(function(){ return {}; });
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent = data.appliedToAllPets ? 'Saved for all your pets. Thank you for keeping this up to date.' : 'Saved. Thank you for keeping this up to date.'; }
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong. Please try again.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong. Please try again.'; }
+  }
+}
+function toggleMedicalLogForm(pi){
+  var box = document.getElementById('medlog-box-'+pi);
+  if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+async function submitMedicalLogEntry(pi){
+  var statusEl = document.getElementById('medlog-status-'+pi);
+  if (!PET_PHOTO_WORKER_URL) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Updates are not available yet \u2014 please contact us directly.';} return; }
+  var typeEl = document.getElementById('medlog-type-'+pi);
+  var nameEl = document.getElementById('medlog-name-'+pi);
+  var notesEl = document.getElementById('medlog-notes-'+pi);
+  var ackEl = document.getElementById('medlog-ack-'+pi);
+  if (!nameEl.value.trim()) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Please enter a name.';} return; }
+  if (!ackEl.checked) { if(statusEl){statusEl.style.display='block';statusEl.style.color='#c0392b';statusEl.textContent='Please check the acknowledgment box before submitting.';} return; }
+  if (statusEl) { statusEl.style.display='block'; statusEl.style.color='#666'; statusEl.textContent='Saving\u2026'; }
+  try {
+    var payload = { action:'add_medical_log_entry', portalId:PORTAL_ID, petIndex:pi, type: typeEl.value, name: nameEl.value, notes: notesEl.value, acknowledged: true };
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      var data = await res.json().catch(function(){ return {}; });
+      if (data.entry) {
+        var listEl = document.getElementById('medlog-list-'+pi);
+        if (listEl) {
+          var emptyMsg = listEl.querySelector('.medlog-empty');
+          if (emptyMsg) emptyMsg.remove();
+          listEl.insertAdjacentHTML('beforeend', renderMedicalLogEntryHTML(pi, data.entry));
+        }
+      }
+      if (statusEl) { statusEl.style.color='#4a9d6e'; statusEl.textContent='Added.'; }
+      nameEl.value=''; notesEl.value=''; ackEl.checked=false;
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent = errText || 'Something went wrong. Please try again.'; }
+    }
+  } catch(e) {
+    if (statusEl) { statusEl.style.color='#c0392b'; statusEl.textContent='Something went wrong. Please try again.'; }
+  }
+}
+async function removeMedicalLogEntry(pi, entryId){
+  if (!PET_PHOTO_WORKER_URL) return;
+  if (!confirm('Remove this entry?')) return;
+  try {
+    var payload = { action:'remove_medical_log_entry', portalId:PORTAL_ID, petIndex:pi, entryId: entryId };
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+    if (res.ok) {
+      var row = document.getElementById('medlog-entry-'+entryId);
+      if (row) row.remove();
+      var listEl = document.getElementById('medlog-list-'+pi);
+      if (listEl && !listEl.querySelector('[id^="medlog-entry-"]')) {
+        listEl.innerHTML = '<div class="medlog-empty" style="color:#999;font-size:0.85rem;">None on file yet.</div>';
+      }
+    }
+  } catch(e) {}
+}
+var _portalPets = [];
+var _myAppointments = [];
+async function portalCheckPassword(){
+  var pass = document.getElementById('portal-password').value;
+  var errEl = document.getElementById('portal-login-error');
+  errEl.style.display = 'none';
+  if (!pass) return;
+  try {
+    var km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), {name:'PBKDF2'}, false, ['deriveKey']);
+    var kek = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b64u(WRAP_SALT), iterations:PBKDF2_ITERATIONS, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, ['decrypt']);
+    var dkBytes = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64u(WRAP_IV)}, kek, b64u(WRAP_CT));
+    var dkKey = await crypto.subtle.importKey('raw', dkBytes, {name:'AES-GCM'}, false, ['decrypt']);
+    var plain = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64u(PAY_IV)}, dkKey, b64u(PAY_CT));
+    var data = JSON.parse(new TextDecoder().decode(plain));
+    _portalPets = data.pets || [];
+    document.getElementById('portal-mount').innerHTML = renderPortalData(data);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('portal-mount').style.display = 'block';
+    loadMessages();
+    loadMyAppointments();
+  } catch(e) {
+    errEl.style.display = 'block';
+    document.getElementById('portal-password').value = '';
+  }
+}
+// Live fetch, matching messages - the static page's own baked-in
+// payload has no idea whether a pet has more than one real
+// appointment, or whether an upcoming one has a real self-service
+// record behind it (which gets an instant Cancel button) versus being
+// set some other way, like a phone call (message-based fallback).
+// Always runs now, not just when self-service booking is enabled -
+// a pet can have real, multiple appointments (staff-booked ones
+// included) regardless of whether a client can book their own, and
+// this is what actually surfaces all of them correctly.
+async function loadMyAppointments(){
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'get_my_appointments', portalId:PORTAL_ID }) });
+    if (res.ok) {
+      var data = await res.json();
+      _myAppointments = data.appointments || [];
+      refreshApptDisplaysFromReal();
+    }
+  } catch(e) {}
+}
+// Rebuilds both the per-pet appointment area and the multi-pet summary
+// from the real, complete list rather than each pet's single baked-in
+// cached field - this is what actually fixes a pet with two or more
+// genuinely separate appointments only ever showing one of them (or
+// the client's own portal only ever letting them book a first
+// appointment, never a second, since the button used to disappear
+// entirely once any existed). Every appointment shown here came
+// straight from the real roster, so it always gets the direct Cancel
+// button - the message-based Request to Cancel fallback is only ever
+// needed for the brief moment before this first runs.
+function refreshApptDisplaysFromReal(){
+  _portalPets.forEach(function(pet, pi){
+    var block = document.getElementById('appt-block-'+pi);
+    if (!block) return;
+    var matching = _myAppointments.filter(function(a){ return a.petName === pet.name; })
+      .sort(function(a,b){ return (a.date+a.startTime).localeCompare(b.date+b.startTime); });
+    var existingHTML = matching.map(function(a){
+      var timeStr = a.startTime ? ' ' + formatApptTime12h(a.startTime) : '';
+      var reasonStr = a.reason ? ' - ' + a.reason : '';
+      return '<div style="margin-bottom:0.75rem;font-size:0.85rem;background:#ececec;border-radius:6px;padding:0.5rem 0.75rem;"><strong>Appointment:</strong> '+a.date+timeStr+reasonStr
+        + '<div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">'
+        + '<button type="button" onclick="cancelSelfServiceAppt('+pi+',\''+a.id+'\')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-family:inherit;">Cancel This Appointment</button>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+    var bookingHTML = (SELF_SERVICE_BOOKING_ENABLED && PET_PHOTO_WORKER_URL) ? (
+      '<div style="margin-bottom:0.75rem;">'
+        + '<button type="button" onclick="toggleBookingPicker('+pi+')" style="background:none;border:1px solid #4a4a4a;color:#4a4a4a;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:inherit;">&#128197; Book '+(matching.length?'Another ':'an ')+'Appointment</button>'
+        + '<div id="booking-picker-'+pi+'" style="display:none;margin-top:0.6rem;padding:0.75rem;background:#f5f5f5;border-radius:8px;">'
+        +   (SERVICE_NAMES.length ? ('<label style="font-size:0.85rem;font-weight:600;">Service</label><br/>'
+        +   '<select id="booking-service-'+pi+'" onchange="toggleOtherServiceField('+pi+')" style="margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;">'
+        +   '<option value="">Select a service...</option>'
+        +   buildServiceOptionsHTML()
+        +   '<option value="__other__">Other (please describe)</option>'
+        +   '</select><br/>'
+        +   '<input type="text" id="booking-service-other-'+pi+'" placeholder="Describe what you need" style="display:none;margin-top:0.4rem;margin-bottom:0.6rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;width:100%;max-width:260px;box-sizing:border-box;"/>') : '')
+        +   '<label style="font-size:0.85rem;font-weight:600;">Pick a Date</label><br/>'
+        +   '<input type="date" id="booking-date-'+pi+'" onchange="loadAvailableSlots('+pi+')" style="margin-top:0.4rem;padding:0.4rem;border-radius:6px;border:1.5px solid #dcded8;"/>'
+        +   '<div id="booking-slots-'+pi+'" style="margin-top:0.6rem;"></div>'
+        +   '<button type="button" onclick="cancelBookingPicker('+pi+')" style="background:none;border:none;color:#666;font-size:0.78rem;cursor:pointer;font-family:inherit;text-decoration:underline;margin-top:0.6rem;padding:0;">Never mind</button>'
+        + '</div>'
+        + '</div>'
+    ) : '';
+    block.innerHTML = existingHTML + bookingHTML;
+  });
+
+  var summaryWrap = document.getElementById('appts-summary-wrap');
+  if (summaryWrap) {
+    var withNames = _myAppointments.map(function(a){
+      var pi = _portalPets.findIndex(function(p){ return p.name === a.petName; });
+      return { a: a, pi: pi };
+    }).filter(function(x){ return x.pi > -1; })
+      .sort(function(x,y){ return (x.a.date+x.a.startTime).localeCompare(y.a.date+y.a.startTime); });
+    summaryWrap.innerHTML = (_portalPets.length > 1 && withNames.length) ? (
+      '<div style="background:#fff8e6;border:1.5px solid #d4a017;border-radius:8px;padding:0.85rem 1rem;margin-bottom:1rem;">'
+      + '<div style="font-weight:700;font-size:0.85rem;color:#4a4a4a;margin-bottom:0.4rem;">Upcoming Appointments</div>'
+      + withNames.map(function(x){
+          var timeStr = x.a.startTime ? ' ' + formatApptTime12h(x.a.startTime) : '';
+          var reasonStr = x.a.reason ? ' - ' + x.a.reason : '';
+          return '<div style="font-size:0.85rem;padding:0.25rem 0;cursor:pointer;" onclick="switchPortalPet('+x.pi+')"><strong style="text-decoration:underline;">'+_portalPets[x.pi].name+'</strong>: '+x.a.date+timeStr+reasonStr+'</div>';
+        }).join('')
+      + '</div>'
+    ) : '';
+  }
+}
+function toggleBookingPicker(pi){
+  var picker = document.getElementById('booking-picker-'+pi);
+  if (picker) picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+}
+// An explicit way to back out of a partial booking, not just clearing
+// the date field and hoping - closes the picker AND resets its state,
+// so reopening it later doesn't show a stale date or leftover slots
+// from this abandoned attempt.
+function cancelBookingPicker(pi){
+  var picker = document.getElementById('booking-picker-'+pi);
+  var dateEl = document.getElementById('booking-date-'+pi);
+  var slotsEl = document.getElementById('booking-slots-'+pi);
+  if (dateEl) dateEl.value = '';
+  if (slotsEl) slotsEl.innerHTML = '';
+  if (picker) picker.style.display = 'none';
+}
+async function loadAvailableSlots(pi){
+  var dateEl = document.getElementById('booking-date-'+pi);
+  var slotsEl = document.getElementById('booking-slots-'+pi);
+  if (!dateEl || !slotsEl) return;
+  if (!dateEl.value) {
+    // A client clearing the date field is a real "never mind" action,
+    // not a no-op - without this, slot buttons from whatever date was
+    // previously picked stay visible and clickable, which is exactly
+    // what looked like a stuck, un-cancellable partial booking.
+    slotsEl.innerHTML = '';
+    return;
+  }
+  slotsEl.innerHTML = 'Checking available times\u2026';
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'get_available_slots', date:dateEl.value }) });
+    if (res.ok) {
+      var data = await res.json();
+      if (!data.slots.length) {
+        slotsEl.innerHTML = '<div style="color:#666;font-size:0.85rem;">No times available that day. Try another date.</div>';
+      } else {
+        slotsEl.innerHTML = data.slots.map(function(s){
+          return '<button type="button" onclick="bookSlot('+pi+',\''+dateEl.value+'\',\''+s.start+'\')" style="margin:0.2rem 0.2rem 0 0;padding:0.4rem 0.7rem;border:1px solid #4a4a4a;border-radius:6px;background:#fff;cursor:pointer;font-size:0.82rem;font-family:inherit;">'+formatApptTime12h(s.start)+'</button>';
+        }).join('');
+      }
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      slotsEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">'+(errText || 'Could not check available times.')+'</div>';
+    }
+  } catch(e) {
+    slotsEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">Could not check available times.</div>';
+  }
+}
+// Toggling to Other reveals a free-text field for a custom combo that
+// doesn't match any listed package - the same trust already extended
+// to a staff-entered reason, just from the client's side this time.
+// Groups the booking dropdown by category using native <optgroup>
+// elements - purely visual/organizational, the underlying <option>
+// values are unchanged, so bookSlot's own validation and the value it
+// reads back need no changes at all. Uncategorized services (the
+// default for any service until the category field was set) render
+// as plain, ungrouped options ahead of any named category, matching
+// the same "uncategorized sorts first, no header" rule the public
+// Services page itself already uses, for a consistent mental model
+// between the two.
+function buildServiceOptionsHTML(){
+  var order = [];
+  var groups = {};
+  SERVICE_NAMES.forEach(function(s){
+    var cat = s.category || '';
+    if (!(cat in groups)) { groups[cat] = []; order.push(cat); }
+    groups[cat].push(s.name);
+  });
+  order.sort(function(a,b){ if (a === '') return -1; if (b === '') return 1; return 0; });
+  return order.map(function(cat){
+    var opts = groups[cat].map(function(n){ return '<option value="'+n.replace(/"/g,'&quot;')+'">'+n+'</option>'; }).join('');
+    return cat ? '<optgroup label="'+cat.replace(/"/g,'&quot;')+'">'+opts+'</optgroup>' : opts;
+  }).join('');
+}
+function toggleOtherServiceField(pi){
+  var selectEl = document.getElementById('booking-service-'+pi);
+  var otherEl = document.getElementById('booking-service-other-'+pi);
+  if (!selectEl || !otherEl) return;
+  otherEl.style.display = selectEl.value === '__other__' ? 'block' : 'none';
+}
+async function bookSlot(pi, dateStr, startTime){
+  var pet = _portalPets[pi];
+  if (!pet) return;
+  var serviceEl = document.getElementById('booking-service-'+pi);
+  var serviceValue = serviceEl ? serviceEl.value : '';
+  if (SERVICE_NAMES.length && !serviceValue) { alert('Please select a service first.'); return; }
+  var serviceName = serviceValue;
+  if (serviceValue === '__other__') {
+    var otherEl = document.getElementById('booking-service-other-'+pi);
+    serviceName = otherEl ? otherEl.value.trim() : '';
+    if (!serviceName) { alert('Please describe what you need.'); return; }
+  }
+  if (!confirm('Book '+pet.name+' for '+dateStr+' at '+formatApptTime12h(startTime)+(serviceName?' ('+serviceName+')':'')+'?')) return;
+  var slotsEl = document.getElementById('booking-slots-'+pi);
+  if (slotsEl) slotsEl.innerHTML = 'Booking\u2026';
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'book_appointment', portalId:PORTAL_ID, petName:pet.name, date:dateStr, startTime:startTime, serviceName:serviceName }) });
+    if (res.ok) {
+      var data = await res.json();
+      pet.nextApptDate = data.appointment.date;
+      pet.nextApptTime = data.appointment.startTime;
+      pet.nextApptReason = serviceName;
+      pet.nextApptId = data.appointment.id;
+      _myAppointments.push(data.appointment);
+      // Rebuilds from the real, complete list rather than the old
+      // single-appointment renderer, which would have shown only this
+      // brand new booking and silently dropped any other appointment
+      // this same pet already had from view.
+      refreshApptDisplaysFromReal();
+    } else {
+      var errText = await res.text().catch(function(){ return ''; });
+      if (slotsEl) slotsEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">'+(errText || 'Could not book that time.')+'</div>';
+    }
+  } catch(e) {
+    if (slotsEl) slotsEl.innerHTML = '<div style="color:#c0392b;font-size:0.85rem;">Could not book that time.</div>';
+  }
+}
+// Checked only for the client's own self-service cancel button - staff
+// cancelling from the admin already knows why they're cancelling and
+// doesn't need this warning. Full-fee window checked first since it's
+// meant to be the shorter, more severe one, closer to the appointment
+// - a client within the full-fee window is also within the partial-fee
+// window by definition, so this order matters. Off entirely unless a
+// groomer has actually configured at least one tier, matching the
+// "zero visible change until deliberately enabled" pattern used
+// throughout this feature.
+function getCancellationFeeWarning(pet){
+  if (!pet.nextApptDate) return null;
+  var apptDateTime = new Date(pet.nextApptDate + 'T' + (pet.nextApptTime || '00:00') + ':00');
+  var hoursUntil = (apptDateTime.getTime() - Date.now()) / 3600000;
+  if (hoursUntil < 0) return null;
+  if (CANCELLATION_FULL_FEE_HOURS && hoursUntil < CANCELLATION_FULL_FEE_HOURS) {
+    return 'This cancellation is within ' + CANCELLATION_FULL_FEE_HOURS + ' hours of your appointment and may incur a ' + CANCELLATION_FULL_FEE_PERCENT + '% fee, per our cancellation policy.';
+  }
+  if (CANCELLATION_PARTIAL_FEE_HOURS && hoursUntil < CANCELLATION_PARTIAL_FEE_HOURS) {
+    return 'This cancellation is within ' + CANCELLATION_PARTIAL_FEE_HOURS + ' hours of your appointment and may incur a ' + CANCELLATION_PARTIAL_FEE_PERCENT + '% fee, per our cancellation policy.';
+  }
+  return null;
+}
+async function cancelSelfServiceAppt(pi, appointmentId){
+  var pet = _portalPets[pi];
+  if (!pet) return;
+  var confirmMsg = 'Cancel this appointment? This frees the time slot for someone else.';
+  var feeWarning = getCancellationFeeWarning(pet);
+  if (feeWarning) {
+    confirmMsg = feeWarning + ' Are you sure you want to cancel?';
+  }
+  if (!confirm(confirmMsg)) return;
+  try {
+    var res = await fetch(PET_PHOTO_WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ action:'cancel_appointment', portalId:PORTAL_ID, appointmentId:appointmentId }) });
+    if (res.ok) {
+      // Only clear the pet's own single cached fields if they still
+      // point at THIS exact appointment - a different one for the
+      // same pet may still be genuinely active, and shouldn't be
+      // clobbered just because a client cancelled some other one.
+      if (pet.nextApptId === appointmentId) {
+        pet.nextApptDate = '';
+        pet.nextApptTime = '';
+        pet.nextApptReason = '';
+        pet.nextApptId = '';
+      }
+      _myAppointments = _myAppointments.filter(function(a){ return a.id !== appointmentId; });
+      // Rebuilds from the real, remaining list rather than the old
+      // single-appointment renderer, which would have shown nothing
+      // at all if another appointment for this same pet is still
+      // genuinely active.
+      refreshApptDisplaysFromReal();
+    }
+  } catch(e) {}
+}
+// Reads from the global _portalPets set at login rather than passing
+// name/date as inline string arguments through onclick - avoids any
+// escaping concerns entirely (matches the existing bare-index pattern
+// already used for submitPetPhoto), since pet names/reasons are never
+// touched by the HTML/attribute layer this way.
+function requestApptChange(pi, kind){
+  var pet = _portalPets[pi];
+  var textEl = document.getElementById('message-compose');
+  if (!pet || !textEl) return;
+  var verb = kind === 'cancel' ? 'cancel' : 'reschedule';
+  textEl.value = "I'd like to " + verb + " " + pet.name + "'s appointment on " + pet.nextApptDate + ". ";
+  scrollToMessages();
+  textEl.focus();
+}
+function icsEscapeText(s){
+  return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+}
+// All-day event - nextApptDate is a plain YYYY-MM-DD date input with no
+// time component anywhere in the data model, so there's no real time to
+// build a timed event around. Pure client-side file generation, no
+// Worker involvement at all - works even for a groomer who never sets
+// up messaging.
+function addApptToCalendar(pi){
+  var pet = _portalPets[pi];
+  if (!pet || !pet.nextApptDate) return;
+  var statusEl = document.getElementById('appt-calendar-status-'+pi);
+  var startStr = pet.nextApptDate.replace(/-/g,'');
+  var endDate = new Date(pet.nextApptDate + 'T00:00:00');
+  endDate.setDate(endDate.getDate() + 1);
+  var endStr = endDate.toISOString().slice(0,10).replace(/-/g,'');
+  var stamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+  var summary = icsEscapeText(pet.name + "'s Grooming Appointment");
+  var desc = icsEscapeText('Appointment at ' + (BUSINESS_NAME||'your groomer') + (pet.nextApptReason ? ' - ' + pet.nextApptReason : ''));
+  var ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//' + icsEscapeText(BUSINESS_NAME||'Pet Portal') + '//EN\r\nBEGIN:VEVENT\r\nUID:' + Date.now() + '-' + pi + '@portal\r\nDTSTAMP:' + stamp + '\r\nDTSTART;VALUE=DATE:' + startStr + '\r\nDTEND;VALUE=DATE:' + endStr + '\r\nSUMMARY:' + summary + '\r\nDESCRIPTION:' + desc + '\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = pet.name.replace(/[^a-z0-9]/gi,'-') + '-appointment.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  // .ics downloads give no visible browser feedback on plenty of
+  // devices - unlike everything else in this portal, nothing here
+  // otherwise tells the client anything happened at all, which reads
+  // as broken and invites a confusing repeat download.
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.color = '#4a9d6e';
+    statusEl.textContent = 'Downloaded! If it didn\'t open automatically, check your Downloads or notifications, then tap the file to add it to your calendar.';
+  }
+}
+document.getElementById('portal-password').addEventListener('keydown', function(e){ if (e.key === 'Enter') portalCheckPassword(); });
+</script>
+</body>
+</html>
