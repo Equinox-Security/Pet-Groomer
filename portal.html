@@ -68,6 +68,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);marg
     </div>
   </div>
   <div class="portal-panel" id="panel-register">
+    <div id="register-form-fields">
     <div class="portal-field"><label>Your Name</label><input type="text" id="reg-name"/></div>
     <div class="portal-field"><label>Email</label><input type="email" id="reg-email"/></div>
     <div class="portal-field"><label>Phone <span style="font-weight:400;color:var(--text-muted);">(optional)</span></label><input type="tel" id="reg-phone"/></div>
@@ -75,8 +76,9 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);marg
     <div class="portal-field"><label>Choose a Password <span style="font-weight:400;color:var(--text-muted);">(8-20 letters/numbers)</span></label><div class="pw-toggle-wrap"><input type="password" id="reg-pass"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('reg-pass');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
     <div class="portal-field"><label>Confirm Password</label><div class="pw-toggle-wrap"><input type="password" id="reg-pass-confirm"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('reg-pass-confirm');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div></div>
     <div class="portal-error" id="register-error"></div>
-    <div class="portal-success" id="register-success">Your account request was submitted! It can take a few minutes for everything to fully take effect.</div>
     <button class="portal-btn" onclick="submitRegistration()">Create Account</button>
+    </div>
+    <div class="portal-success" id="register-success">Your account request was submitted! It can take a few minutes for everything to fully take effect.<br/><br/><a href="#" onclick="switchTab('login');return false;" style="color:inherit;font-weight:600;text-decoration:underline;">Go to Sign In &rarr;</a></div>
   </div>
 </div></div>
 <script>
@@ -182,6 +184,7 @@ async function submitRegistration(){
     var res = await fetch(WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'register', name:name, email:email, phone:phone, username:user, password:pass})});
     if (res.ok) {
       document.getElementById('register-success').style.display = 'block';
+      document.getElementById('register-form-fields').style.display = 'none';
       ['reg-name','reg-email','reg-phone','reg-user','reg-pass','reg-pass-confirm'].forEach(function(id){ document.getElementById(id).value=''; });
     } else {
       var errText = await res.text().catch(function(){ return ''; });
