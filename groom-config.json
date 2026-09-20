@@ -318,6 +318,7 @@
     ],
     "reminderDaysBefore": "1",
     "appointmentRetentionDays": "60",
+    "welcomeMessage": "",
     "tosContent": "",
     "booking": "",
     "selfServiceBooking": {
