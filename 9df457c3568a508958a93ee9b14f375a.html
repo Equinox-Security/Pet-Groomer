@@ -42,12 +42,16 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);marg
 <h2>Sign In</h2><p>Enter your password to view your pet's grooming records.</p>
 <div class="pw-toggle-wrap"><input type="password" id="portal-password" placeholder="Password"/><button type="button" class="pw-toggle-btn" onclick="var f=document.getElementById('portal-password');f.type=f.type==='password'?'text':'password';" title="Click to show/hide">&#128065;</button></div>
 <div id="portal-login-error">Incorrect password. Please try again.</div>
+<label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--text-muted);margin:0 0 0.85rem;cursor:pointer;justify-content:center;"><input type="checkbox" id="portal-remember-checkbox" checked onchange="portal_onRememberToggle(this)" style="width:auto;"/> Remember on this device</label>
 <button class="login-btn" onclick="portalCheckPassword()">Sign In</button>
+<button type="button" id="portal-bio-btn" class="login-btn" style="background:var(--accent);margin-top:0.6rem;display:none;" onclick="portal_unlockBio()">Unlock with Biometrics</button>
+<div style="text-align:right;margin-top:0.75rem;"><a href="#" id="portal-forget-link" style="display:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;" onclick="portal_forgetDevice();return false;">Forget this device</a></div>
 </div></div>
+<div id="portal-bio-bar" style="display:none;text-align:right;max-width:360px;margin:0 auto 0.75rem;"><button type="button" id="portal-bio-manage" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;font-family:inherit;padding:0;">Enable Biometric Unlock</button></div>
 <div id="portal-mount"></div>
 <script>
 var WRAP_CT="M9/Zc3UjCerVbVF+fwdA7CyrIzXu4h1FMPmJzt0a82kCoe0z0ZUqUyVVALwtk7F2";var WRAP_SALT="qOxZj2l8DLUx4qAdBoGhfg==";var WRAP_IV="6jvwPjstZ3bylwRm";
-var PAY_CT="i9wvnY2Tx1wJxxpnzGou+2aif78rCZL9i1Iwg8VM0BfUpQ1QJ3gG6uXDoYOJpJfqQnk51V44S/GAfJEEjEPsKrTnLPUfx4VxND5iQjuTJifRxajJbEbMCGStQQLRL42QYiRSFAvlRVb0tYWxlztCuuafCqtRIdYUpwnM8P9s7Ql19y2WpSrzWJJp5P+ufnnZxVCgppnPdPC2khNXRoDZCw2qIDpW+iwT4rdBbwZp09PF9STGMseXmACEg2OVpHmaQLnZDOWUKVMTpl8vxh7+Fzov53WxEFUVp657SH+lljOTdHBmiKG9R44T36UFmGb8rAD01CWvOOsgZhqg3bIy9cadQ1nidsMbdlcSNGSVgXuWplbHobOPPnm4Kf9zKvdILphz1iDUOlA3Ui0RzY9ySWcClW9rxsMXzty4VS91tJ4PxLZJZqxaoFHG7k5si3ysKAx8utBigcxyZJzE5k+hLmWZwc//2wCwiLz94n22kO7zXCJIsT/AYRDLkasUUrnzQDsLKl4ENLrGzrY2vUEMB/NslVNufSnDF3A+o4U7VWzoZofCHFZLIJ5CDQAUnDXb3rZfhOvJitNj0Tak7dBf+EgxGofI/RYQg2i6j8t1FYMXYN7MUY/joN1qjOeK+hLbufBihuGuBS2NJjZKXpiroYJi86rE4Q54UBYUPxOevD9mw1HBEP+PPg/YPu1MiOojITQtm5nwF4LRX+MBJPohUlQiUlx3TdPVDrc1/96dF87nFMnBtZFs/bkPk/34uHypkR97kg/9I5QqldG6ZxnMc9CvcPIHLJ4VbCluoKvENzWOQLzXXhlNiJZu79wI6Usd93Ay5mEDxbkt6rjlSDDvNJYBB19ThtRb6LU3gKB+ChYSNSddS/TZE75p3iLZS7PX1QLXCOxUPswQAChek6gw6n3vSxym+t3Eds/3pysgyzjibJSZA6cZlkgOG+M3j9zp6ph5NzHfHocS/mP2PR+SVaIAnaW6qb5ZichsP1O1U4cEJEUdgvTdjq1u4MRG19DKcL81/KGX781bWpeGxvcTcnwEEXZZd+xUdk82lnisuQqZobcmClW/mRDLJutLRuIl1XoEumu3tIeA3Y1IVD51SAGYgzQSwqMMpxz6EYjfhg9/DOBvrpRn6/OpbdpzIJdutp6TIYF//GSl3tTOohCSOlzPPovy3bdatj44O3VwGGoBrrvs1xN5V5VpV+sFxU5taaadcrNqhjCYZnQM2nEfQskjU6tqewXRPPwHktrs9no9Cw1qSoDX31IPiMmZgBsjfqa3bUO2qShmovV5Jikx3kvcy/E1l7Mf7JypfSTq83/K+6OfsRbOAru76hQ+0SRO+/nY94zRRNwfyJhUXF4Zql7QPMyyi8gpnz4a6rxExuBiUSpv5/QmYOZFSVieD7UKthhHeGCIstC93zPlCmc=";var PAY_IV="WT6wO6nCR01EzTds";
+var PAY_CT="cg2Q6hxQkR5Yp/0ZNFISRCC/PE4mk75etndtNLKTXu3eYSlzNAy41CNPXUc0Nd8gXJrhIlF43fA0S/NDEL7YOiGGnOtqCCruu9VrmL3cw+SWsNKwKHFxORHDXEZezrS18MnKx/0qtQNHmpaDMGo71wIKg7FXL+W9ysAuNfCBVBX4i7fQOUFfzHSEtT6/FHV6gS6Ga5dDS2zkM1wYcKHa4B6NeqkoHASpP0DoTL1LcnWmELSzYnGGo2r1TvvXzieCgtQLkVDrSjgoECcQaC4hzoSRoljqOh7F7Ilj8homdml5HBhvd3DfAwyGyFdQl203u/Ib9BWIwEhbg4O0pve8FHaipv5NtO/x/7r8YhcWZ6s2U9mwBqpw5T3P5C2eEjKMP0+ZKmqvvfheBKavkqvqgOJvYYR5CxlwqiLTOVS4Mcpuy2sMctNGwmh7apT1haiYdscO6L/0hIxKouDPXJ3EIcs/CMkrjy9b4hDMUbEPsXAbnXTGzOYZ5WxsWWqu7CwqiDiesQobfQSZoZpBm2QQlHQcsRTAYn83/99V/KCT4ZdD/KNU4Y3YBjIYHxropHaznb0RjUjLahjzCc3Uvj0HkqHIyod7DkQkb5jWLqEkwhAlB37dkcMffSoF9AhkUlEvEW22sbOXiTUCZLp2+H9Kqvtb5Gm/ddfJeED0wg052VNTq5OBEFj0XAu6DfOW89o/fY6jXnKT7YD7tpLC24CtkKRF6jiqw8ef2ujt5u1uWRoL/w0MeDWN7hHnfMPc8+4GVg8o2jq0dlmAz99Qmcga3wbRvZcskvuSxDz7NbsNsjoVONBVQKcy9d9w31Ds9xfEwBpFrAmtRgxJWp/l55o7Why9Ok/ZiJ514v7eiHeTn77nhHU7uMuI+ePUP4vQVJWu4X4PBQ6TpyjwVS2HaS4l2UhAGdp+LyWNYOa9MWU+4GUbWCCs6PuVFOY0zb8ReDYtSTTrYrDZkQj7feNBG10F+nhGf/g6fLAY/821KsAV0tQ153na0YZFUX1ElqKGHPjBkRT6K90ODZ4PtpU0Cd572qaOfHO3GPO/wRRSQueGql6/g+W4extyU2uKRuy7nIw6OVHjkrdL8vIFklWGjgN/K8FX2SbSNJdG8tkZ9hffel8bZkGlMbZw7V43SCh6AhutuPb/NKRyNFnKVTYmsVtVyQAxwUuVAmxiyUyIH0sDIZsIZnPXHMjQgW5uLENfiqKDVTWa2QJlCq8LKmNE9Wb2nCbxuu16+jklAK5yGoDxuAMrbxCHmvU0vHSC3ytpfgvnAYeU7VOQUwA2BuZkwO4zmKeBr/2KbJLA4AI4YdJ7In2nicE6RpGUvK7RI9com6aJw7ZknW+z+nNKjOMt//UkQXLjxSqckHKRvBcBnrgQVGtH0DHL1hthhmQvZ5zQkksJkwzcw8xvY+JjrjlOSEM=";var PAY_IV="eQY7KjPmGm/x4IUi";
 var PBKDF2_ITERATIONS=100000;
 var PORTAL_ID="9df457c3568a508958a93ee9b14f375a";
 var BUSINESS_NAME="Shear Pawfection Pet Grooming";
@@ -688,6 +692,197 @@ async function removeMedicalLogEntry(pi, entryId){
 }
 var _portalPets = [];
 var _myAppointments = [];
+// "Remember this device" - wraps the real password with a random
+// per-device AES-GCM key and stores it in localStorage, auto-running on
+// page load so a returning client doesn't have to retype it. Storage key
+// is scoped to PORTAL_ID - every client's portal page shares this same
+// origin, so an unscoped key name would let one client's remembered
+// password collide with another's on a shared family or front-desk
+// computer. There's no separate password-hash check here the way HOA's
+// engine has one - a wrong/stale remembered password just fails to
+// decrypt in portalCheckPassword below, which is already the correct,
+// authoritative check.
+// Auto-expires after 90 days of not being used, since nothing here ever
+// asks a client to re-confirm they still want this on.
+var REM_KEY = "groom_rem_key_" + PORTAL_ID;
+var REM_MAX_AGE = 1000 * 60 * 60 * 24 * 90;
+async function remWrap(pw, wk) {
+  var enc = new TextEncoder();
+  var data = enc.encode(JSON.stringify({p: pw}));
+  var key = await crypto.subtle.importKey('raw', wk, {name:'AES-GCM'}, false, ['encrypt']);
+  var iv = crypto.getRandomValues(new Uint8Array(12));
+  var enc2 = await crypto.subtle.encrypt({name:'AES-GCM', iv:iv}, key, data);
+  var combined = new Uint8Array(iv.length + enc2.byteLength);
+  combined.set(iv); combined.set(new Uint8Array(enc2), iv.length);
+  return btoa(String.fromCharCode.apply(null, combined));
+}
+async function remUnwrap() {
+  var stored = localStorage.getItem(REM_KEY);
+  if (!stored) return null;
+  try {
+    var parsed = JSON.parse(stored);
+    if (parsed.savedAt && (Date.now() - parsed.savedAt) > REM_MAX_AGE) return null;
+    var wk = Uint8Array.from(atob(parsed.wrapper), function(c){ return c.charCodeAt(0); });
+    var combined = Uint8Array.from(atob(parsed.data), function(c){ return c.charCodeAt(0); });
+    var iv = combined.slice(0,12), enc2 = combined.slice(12);
+    var key = await crypto.subtle.importKey('raw', wk, {name:'AES-GCM'}, false, ['decrypt']);
+    var dec = await crypto.subtle.decrypt({name:'AES-GCM', iv:iv}, key, enc2);
+    return JSON.parse(new TextDecoder().decode(dec)).p;
+  } catch(e) { return null; }
+}
+function portal_isRemembered() { return localStorage.getItem(REM_KEY) !== null; }
+function portal_refreshRemember() {
+  var link = document.getElementById('portal-forget-link');
+  if (link) link.style.display = portal_isRemembered() ? 'inline-block' : 'none';
+  var cb = document.getElementById('portal-remember-checkbox');
+  if (cb) cb.checked = portal_isRemembered();
+}
+function portal_forgetDevice() { localStorage.removeItem(REM_KEY); portal_refreshRemember(); }
+// Shown every time the checkbox is freshly checked, not just the first
+// time this device has ever seen it - so if one person on a shared
+// device already turned it off, a second person turning it back on
+// always gets the reminder rather than silently inheriting an earlier
+// "yes" they never gave themselves. Cancelling just unchecks the box.
+function portal_onRememberToggle(cb) {
+  if (!cb.checked) return;
+  if (!confirm("This saves your password on this device so you won't need to re-enter it next time. Do not use this on a public or shared computer where others could access your pet's information.
+
+Continue?")) cb.checked = false;
+}
+// Only called after portalCheckPassword has already proven this exact
+// password correct (a successful decrypt) - never stores an unverified
+// guess.
+async function portal_maybeRemember(pw) {
+  var cb = document.getElementById('portal-remember-checkbox');
+  if (!cb || !cb.checked) return;
+  var wk = crypto.getRandomValues(new Uint8Array(32));
+  var wrapped = await remWrap(pw, wk);
+  localStorage.setItem(REM_KEY, JSON.stringify({wrapper: btoa(String.fromCharCode.apply(null, wk)), data: wrapped, savedAt: Date.now()}));
+  portal_refreshRemember();
+}
+async function portal_tryAutoUnlock() {
+  if (!portal_isRemembered()) return;
+  var pw = await remUnwrap();
+  if (!pw) { portal_forgetDevice(); return; }
+  document.getElementById('login-screen').style.display = 'none';
+  var pwEl = document.getElementById('portal-password');
+  if (pwEl) pwEl.value = pw;
+  await portalCheckPassword();
+  var errEl = document.getElementById('portal-login-error');
+  if (errEl && errEl.style.display === 'block') {
+    portal_forgetDevice();
+    document.getElementById('login-screen').style.display = '';
+  }
+  if (pwEl) pwEl.value = '';
+}
+
+// Biometric (fingerprint / Face ID / Windows Hello) unlock - the same
+// WebAuthn-platform-authenticator + AES-GCM key-wrap approach as vet and
+// HOA's engines, ported here for consistency now that groomer has the
+// same kind of per-client password gate they do. Uses the same wrap
+// technique as "remember this device" above (wraps the real password,
+// not a hash - there's no hash to compare against here), just gated
+// behind a fingerprint/FaceID prompt instead of running automatically,
+// and with no expiry - a biometric gesture re-proves intent every time,
+// so there's no unattended risk window the way a silently-remembered
+// password has.
+var CRED_KEY = "groom_bio_cred_" + PORTAL_ID;
+var WRAP_KEY = "groom_bio_key_" + PORTAL_ID;
+function bioAvail() { return window.PublicKeyCredential !== undefined && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'); }
+async function bioSupported() { if (!bioAvail()) return false; try { return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(); } catch(e) { return false; } }
+function bioEnabled() { return localStorage.getItem(CRED_KEY) !== null && localStorage.getItem(WRAP_KEY) !== null; }
+async function bioCreateCred() {
+  try {
+    var uid = crypto.getRandomValues(new Uint8Array(16));
+    var cred = await navigator.credentials.create({publicKey:{
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      rp: {name: BUSINESS_NAME + ' Portal', id: window.location.hostname},
+      user: {id: uid, name: 'client', displayName: 'Pet Portal Access'},
+      pubKeyCredParams: [{alg:-7,type:'public-key'},{alg:-257,type:'public-key'}],
+      authenticatorSelection: {authenticatorAttachment:'platform', userVerification:'required', residentKey:'discouraged'},
+      timeout: 60000, attestation: 'none'
+    }});
+    return cred;
+  } catch(e) { console.error('Biometric setup error:', e); return null; }
+}
+async function portal_enableBio() {
+  var pwEl = document.getElementById('portal-password');
+  var pw = pwEl ? pwEl.value : '';
+  if (!pw) { alert('Please sign in with the password first, then enable biometrics.'); return; }
+  var sup = await bioSupported();
+  if (!sup) { alert('Biometric unlock is not available on this device or browser.'); return; }
+  var cred = await bioCreateCred();
+  if (!cred) { alert('Could not set up biometric unlock on this device.'); return; }
+  var cid = btoa(String.fromCharCode.apply(null, new Uint8Array(cred.rawId)));
+  localStorage.setItem(CRED_KEY, cid);
+  var wk = crypto.getRandomValues(new Uint8Array(32));
+  var wrapped = await remWrap(pw, wk);
+  localStorage.setItem(WRAP_KEY, JSON.stringify({wrapper: btoa(String.fromCharCode.apply(null, wk)), data: wrapped}));
+  portal_refreshBio();
+  alert('Biometric unlock enabled on this device.');
+}
+async function portal_unlockBio() {
+  var cs = localStorage.getItem(CRED_KEY);
+  if (!cs) return;
+  try {
+    var cid = Uint8Array.from(atob(cs), function(c){ return c.charCodeAt(0); });
+    var assertion = await navigator.credentials.get({publicKey:{
+      challenge: crypto.getRandomValues(new Uint8Array(32)),
+      rpId: window.location.hostname,
+      allowCredentials: [{id: cid, type:'public-key', transports:['internal']}],
+      userVerification: 'required', timeout: 60000
+    }});
+    if (!assertion) return;
+    var stored = localStorage.getItem(WRAP_KEY);
+    if (!stored) { portal_removeBio(true); return; }
+    var parsed = JSON.parse(stored);
+    var wk = Uint8Array.from(atob(parsed.wrapper), function(c){ return c.charCodeAt(0); });
+    var combined = Uint8Array.from(atob(parsed.data), function(c){ return c.charCodeAt(0); });
+    var iv = combined.slice(0,12), enc2 = combined.slice(12);
+    var key = await crypto.subtle.importKey('raw', wk, {name:'AES-GCM'}, false, ['decrypt']);
+    var pw;
+    try {
+      var dec = await crypto.subtle.decrypt({name:'AES-GCM', iv:iv}, key, enc2);
+      pw = JSON.parse(new TextDecoder().decode(dec)).p;
+    } catch(e) { pw = null; }
+    if (!pw) { portal_removeBio(true); return; }
+    var pwEl = document.getElementById('portal-password');
+    if (pwEl) pwEl.value = pw;
+    await portalCheckPassword();
+    var errEl = document.getElementById('portal-login-error');
+    if (errEl && errEl.style.display === 'block') {
+      portal_removeBio(true);
+      errEl.textContent = 'Your saved biometric unlock is out of date. Please sign in with the password.';
+    }
+    if (pwEl) pwEl.value = '';
+  } catch(e) {
+    console.error('Biometric unlock error:', e);
+    if (e && e.name !== 'NotAllowedError') alert('Biometric unlock failed.');
+  }
+}
+function portal_removeBio(silent) {
+  if (!silent && !confirm('Remove biometric unlock for this device?')) return;
+  localStorage.removeItem(CRED_KEY);
+  localStorage.removeItem(WRAP_KEY);
+  portal_refreshBio();
+}
+async function portal_refreshBio() {
+  var sup = await bioSupported();
+  var en = bioEnabled();
+  var loggedIn = (document.getElementById('login-screen') || {}).style.display === 'none';
+  var ub = document.getElementById('portal-bio-btn');
+  var mb = document.getElementById('portal-bio-manage');
+  var bar = document.getElementById('portal-bio-bar');
+  if (ub) ub.style.display = (sup && en && !loggedIn) ? 'block' : 'none';
+  if (bar) bar.style.display = (sup && loggedIn) ? 'block' : 'none';
+  if (mb) {
+    mb.textContent = en ? 'Remove Biometric Unlock' : 'Enable Biometric Unlock';
+    mb.onclick = en ? function(){ portal_removeBio(false); return false; } : function(){ portal_enableBio(); return false; };
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){ portal_tryAutoUnlock(); portal_refreshRemember(); portal_refreshBio(); });
+
 async function portalCheckPassword(){
   var pass = document.getElementById('portal-password').value;
   var errEl = document.getElementById('portal-login-error');
@@ -704,6 +899,8 @@ async function portalCheckPassword(){
     document.getElementById('portal-mount').innerHTML = renderPortalData(data);
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('portal-mount').style.display = 'block';
+    if (typeof portal_refreshBio === 'function') portal_refreshBio();
+    if (typeof portal_maybeRemember === 'function') portal_maybeRemember(pass);
     loadMessages();
     loadMyAppointments();
   } catch(e) {
