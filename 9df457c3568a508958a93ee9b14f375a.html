@@ -48,12 +48,12 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--stone);marg
 <div style="text-align:right;margin-top:0.75rem;"><a href="#" id="portal-forget-link" style="display:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;" onclick="portal_forgetDevice();return false;">Forget this device</a></div>
 </div></div>
 <div id="portal-bio-bar" style="display:none;text-align:right;max-width:360px;margin:0 auto 0.75rem;"><button type="button" id="portal-bio-manage" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;font-family:inherit;padding:0;">Enable Biometric Unlock</button></div>
-<div id="portal-devices-bar" style="display:none;max-width:640px;margin:0 auto;padding:0 2rem;text-align:right;"><button type="button" id="portal-devices-toggle" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;font-family:inherit;padding:0;" onclick="portal_toggleDevicesPanel();return false;">Manage My Devices</button></div>
+<div id="portal-devices-bar" style="display:none;max-width:360px;margin:0 auto 0.75rem;text-align:right;"><button type="button" id="portal-devices-toggle" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:0.82rem;font-family:inherit;padding:0;" onclick="portal_toggleDevicesPanel();return false;">Manage My Devices</button></div>
 <div id="portal-devices-panel" style="display:none;max-width:640px;margin:0.5rem auto 0;padding:1rem 1.25rem;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:0.85rem;"></div>
 <div id="portal-mount"></div>
 <script>
 var WRAP_CT="M9/Zc3UjCerVbVF+fwdA7CyrIzXu4h1FMPmJzt0a82kCoe0z0ZUqUyVVALwtk7F2";var WRAP_SALT="qOxZj2l8DLUx4qAdBoGhfg==";var WRAP_IV="6jvwPjstZ3bylwRm";
-var PAY_CT="N+E7jo4JOC5C//oyyeXj8MZum2lN3QHr0BEMHMVJiSAmGOQBty13ipDxJOB42aIq2+Rp1nu0vMVKQaWz+SPbWl4Y8EJhzAdMeg78Uh7GynMZPDEBrGjHCFBimZDUElXZ6rJtwt1bf6+WeNi8hal4g8WsiNrXvFy8g20IkokBsJpieFeoaquRgUJZmnFKuxRKSlAY/UL2BU0MbmfKjvcd2ltVK3RUq4iAo4dfXEugtx0QDKwDzJoV+fseAHdEqfU2auXNDuPHNquTsP01cXGm4sVmRnOH8dU7tv89Vm7ixRBRtlEQgIoPlvvXu4S1jh2BIje/BJ24dVJrMC51zXX5URI2hLzOgPp5JutWfcIvJtco6d2cB1tCb3wApLp57aELTndhRgHb+PopzthPFbGkJ7mSmXKjWu5881slsUy6RUQs9pOea8wcfw9Voxog9ioX1P274BDMs7+TToj69THU179egyx/nDvhcRrzC05ZSSChYCzzEKMwcKUYUrlnTbuvPA89+2o9NHCv7L7aBya6NLwiDLdCeBm9oOu8ZsGF9n4u/VgB+ghTpK1J5HNo56UuEawxD3WblgEDRBBj0ktubWwaZwZLFGV14VeAcpemaRUrk44zDSb/mbiYHODGhljN61uRk5XJZzXH2eYYyDEpbmyIejTH7M6NQCPik1Lk2jZLNjDpdkTu5dA4v3tWJcwNtNNcnBwZy/RgCr2jQYm2lP19Nvj3Tj/riXv35CamG04XxReVMxVd7jqI3piYIA0EXmAPC+kcH42HGJrgXo/BxhnhGU16CUTKATkSDGhZ63J04q5UbCHM19jEB92IJtJ8z0JNto3lyqLhUmSU+/QikWhh85KQDcYiy0azd168z7wy+pCYYndr2OxTPN5AugB35qfQ2pWqdgKZ5Fh+WTzV8yI9uJNLCvMAs5ekVxM/ehne7e9zxswlCStAhasT9TQC9PhE7+tf/blrboM7UQewEx17NUl6ghh9QM2fArRICvtpL7wLqZecSfyi3iw23/bZIMB6IDNFARuKJnCFXeTXxKt1oBajsSKjUT3XT/N2fCCKfACIpUlpTOpnhvhkVqLiC5nOVy6vfZeI27bVDWVuhweEy3FRAAa/kW1jM9XTpmVLbxaldNRbESfD1x9QYOa1bwZ/ZGndErBGHWNaeAnESwmA2VWivbcetVxoTQw+Nsb8k61yK/XR0hrk/NGWmdQ//mJmEuKFxFnZrvBS/+o32ELyDqO+94ZNMjh/QyzSi3pwbF1I1Plbg4WXuHEAff7UNau8+nYmq+W/Fs2ayhCUW91qJ9g01lrvpo6XdC0miFqQsFVJOPLpNAUwWlXsmqa9AiXtZEdMdlCzml3ZeZhQ9ZqNnIkv9QHWf73+jx71DeKT7a48/bWsKgYV3PdKwM1lRq7jweMBKSXKUksTMY0=";var PAY_IV="0jcOIvP6w05sCoY4";
+var PAY_CT="XKLEPYUFuAP3MYBZt+oDvPqweilPcn3Vk5FaBJ9f5kXd3LWk+fyvxlqnP5TSuVdslHo4Jy+uh+fRfPjUgXhIV0UNT8cohdi595lMFw/bgE0LVOZU18g2Zt8U4dRilYzlfE38xXZVc+8QRovxBBFcGfQImmKzNBxbybpWrMH6oJ95iO3eJtonYTwI1JyD4JMcUCYE3RExBtUysi06FuQir22Srb5hKMi//JldDIiJ1SLKT/Py291ZZ8NK1nSDexQUBhPtBATnIW651A03KjURyA7QhPnA3hPSw5dfQsf0+Hqeu2wX417nHGHFhf2EKZDx1aQYyxcTSZ8SHbuNh7+WaRvOThNg54T1VGQvVvRVF8KlWBEt13s7yMamdPSErZCx7RFbMOebgMxBTejLJKjWbkDipSsQBI1cw+wvOjQy/lGd8lxVs0vCDpap4GG1f33aUKCc6kJZs5rEcfgrP07AgwipaCRyLXgMAkmtZfbrx5VuajZz7HvY6qZl2rj30jb52oMjK0AlnAJ99IVLnjYSWhD68fiw+7ny4RKZWLnVbQPwPnHp6VIAZidtIbfqrS1IW4+6Vo13Br2vfQhkFkgSeixKOYEVePfNLpvxv8+hvQ26rTy1jfYnHvbgbYGQgeG04mpVePcNMexScaInCXgl2hdvqWAdKQlbEQVy5Ngb43/4q1A/PhfxNGl980Y5vG6ECW9c/rwruzMLYqlxlTpS5XnSnBCQn9H9GVduSUTnq+qS7kF94brQQdlvYCCGqolbJIU9Esrc8WEC8H2ITkLP9RfKhGbI1MFPaX/vkYeqlwrYdOmZw1Zp3OuxYohUJFQIGwDigEiCumY2F7ystS4sFeIBeATtdsRbGyBibJSULjCYl12JOJnH9oI55k1dGMuDvwXhR5PfzcjxRSEpGu7VeDILoqyHe+AwbGMhn0IKc42DUcgImtcg1Trrnhg+aSZRw2BCn5pyGjgvZYabsPpXYJXFJdBoOwYkpDuZ0ADHzF18W7dmQm0FvPUz8ZVKhPNvY0SYpsLFwz2ud5dmFawv9ns1UqkDXXU7TXom/kL2zJG5sFo/3T1OfECeHXWw003jQ6iozpFqOwWojhrqMc/mtSWG8Rqrd94HovK1bOS+oITAvN8r+J3Cibmep/hoYIF/K1rt95PkRKP728vga6au7mPTKsh5A7iAXGH7rTyB6xSG4dwG1cPXL3ueA0Um3QWONVqi1nqAlbx/k3Rtar1R6H9uN6gtVAJz1Yht1Sq8oVpgPbPTbS7Owf5Qtn26W2ytCWsp+SPFkKzREJ5Z/E4yZrpmZN8cQ2/W2vjsnCmDzhnwa3GfqhCRRS/7uMI5iGtY/7K4c1mT8jPRh0jgH7M5vmSdRyHtItBgwadHb1fDEOVWqoee4eGEMpNkkHVQurkjSWLPX45InJ3Gt3xdyv4=";var PAY_IV="NSqf3W51bJw0dxNk";
 var PBKDF2_ITERATIONS=100000;
 var PORTAL_ID="9df457c3568a508958a93ee9b14f375a";
 var BUSINESS_NAME="Shear Pawfection Pet Grooming";
@@ -249,6 +249,11 @@ function scrollToMessages(){
   var el = document.getElementById('messages-section');
   if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
 }
+function dismissMessageBanner(msgId){
+  localStorage.setItem(DISMISSED_MSG_KEY, msgId);
+  var bannerEl = document.getElementById('new-reply-banner');
+  if (bannerEl) bannerEl.innerHTML = '';
+}
 function renderMessagesListHTML(messages){
   var msgs = messages || [];
   if (!msgs.length) return '<div style="color:#999;font-size:0.85rem;">No messages yet.</div>';
@@ -314,8 +319,9 @@ async function loadMessages(isManualCheck){
       if (pastAreaEl) pastAreaEl.innerHTML = renderPastThreadsHTML(data.pastThreads);
       if (bannerEl) {
         var lastMsg = activeMsgs.length ? activeMsgs[activeMsgs.length - 1] : null;
-        bannerEl.innerHTML = (lastMsg && lastMsg.from === 'staff')
-          ? '<div class="new-message-alert" style="background:var(--primary-light);border:2px solid var(--primary);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-size:0.9rem;font-weight:600;">&#128172; You have a new message from your groomer!</span><button type="button" onclick="scrollToMessages()" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">View Message</button></div>'
+        var isDismissed = lastMsg && lastMsg.id && localStorage.getItem(DISMISSED_MSG_KEY) === lastMsg.id;
+        bannerEl.innerHTML = (lastMsg && lastMsg.from === 'staff' && !isDismissed)
+          ? '<div class="new-message-alert" style="background:var(--primary-light);border:2px solid var(--primary);border-radius:8px;padding:0.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;"><span style="font-size:0.9rem;font-weight:600;">&#128172; You have a new message from your groomer!</span><span style="display:flex;gap:0.5rem;"><button type="button" onclick="scrollToMessages()" style="background:var(--primary);color:#fff;border:none;border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">View Message</button><button type="button" onclick="dismissMessageBanner(\''+lastMsg.id+'\')" style="background:none;border:1px solid var(--primary);color:var(--primary);border-radius:6px;padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:inherit;">Dismiss</button></span></div>'
           : '';
       }
       if (isManualCheck && checkStatusEl) {
@@ -708,6 +714,14 @@ var _myAppointments = [];
 // asks a client to re-confirm they still want this on.
 var REM_KEY = "groom_rem_key_" + PORTAL_ID;
 var REM_MAX_AGE = 1000 * 60 * 60 * 24 * 90;
+// Tracks the id of the most recent staff message the client has explicitly
+// dismissed the "new message" banner for, so the pulsing alert can be
+// cleared without forcing the client to archive the whole conversation
+// just to make it stop. Only ever holds one id (the latest dismissal), so
+// it never accumulates - a genuinely new staff message always has a
+// different id and reopens the banner regardless of what was dismissed
+// before.
+var DISMISSED_MSG_KEY = "groom_dismissed_msg_" + PORTAL_ID;
 async function remWrap(pw, wk) {
   var enc = new TextEncoder();
   var data = enc.encode(JSON.stringify({p: pw}));
